@@ -3,20 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraLock : MonoBehaviour {
-	//public GameObject target;
-	//public GameObject target;
-	//private Script other;
-	public GameObject g;
+	public GameObject alpha;
+	public GameObject beta;
+	public GameObject charlie;
+	public GameObject delta;
 
-	COMCalculater other = g.GetComponent<COMCalculater>();
+	public float comX;
+	public float comY;
+	public float comZ;
 
   void Start() {
-		//other = GameObject.GetComponent("COMCalculator");
+
   }
 
 	// Update is called once per frame
 	void Update () {
-		transform.position = new Vector3(other.comX()-10, other.comY()+10, other.comZ()-10);
+		comX = (alpha.transform.position.x+beta.transform.position.x
+		+charlie.transform.position.x+delta.transform.position.x)/4;
+		comY = (alpha.transform.position.y+beta.transform.position.y
+		+charlie.transform.position.y+delta.transform.position.y)/4;
+		comZ = (alpha.transform.position.z+beta.transform.position.z
+		+charlie.transform.position.z+delta.transform.position.z)/4;
+
+		transform.position = new Vector3(comX+5, comY+5, comZ-5);
 		transform.eulerAngles = new Vector3(30, -45, 0);
 	}
 }

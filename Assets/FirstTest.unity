@@ -206,7 +206,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 106aa4fa2445ab14d98ce9004fb5e9a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 525440997}
+  alpha: {fileID: 500167381}
+  beta: {fileID: 238203465}
+  charlie: {fileID: 516137178}
+  delta: {fileID: 541861201}
+  comX: 0
+  comY: 0
+  comZ: 0
 --- !u!1 &133653419
 GameObject:
   m_ObjectHideFlags: 0
@@ -539,7 +545,6 @@ GameObject:
   m_Component:
   - component: {fileID: 525440998}
   - component: {fileID: 525440999}
-  - component: {fileID: 525441000}
   m_Layer: 0
   m_Name: Tetrahedron
   m_TagString: Untagged
@@ -579,24 +584,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &525441000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 525440997}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4db3718d62a94141aa66914fd45830f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  alpha: {fileID: 500167381}
-  beta: {fileID: 238203465}
-  charlie: {fileID: 516137178}
-  delta: {fileID: 541861201}
-  comX: 0
-  comY: 0
-  comZ: 0
 --- !u!1 &541861201
 GameObject:
   m_ObjectHideFlags: 0
