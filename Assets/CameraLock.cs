@@ -25,7 +25,7 @@ public class CameraLock : MonoBehaviour {
 		comZ = (alpha.transform.position.z+beta.transform.position.z
 		+charlie.transform.position.z+delta.transform.position.z)/4;
 
-		transform.position = new Vector3(comX+5, comY+5, comZ-5);
-		transform.eulerAngles = new Vector3(30, -45, 0);
+		transform.position = new Vector3(comX+0.3f, comY+0.3f, comZ+0.3f);
+		transform.eulerAngles = new Vector3(30, 225, 0);
 	}
 }
