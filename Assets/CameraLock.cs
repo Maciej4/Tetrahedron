@@ -17,13 +17,19 @@ public class CameraLock : MonoBehaviour {
     public float angleXoffset = 0.0f;
     public float angleZoffset = 0.0f;
 
-    public float startMouseX;
-    public float startMouseY;
+    public float radius;
+    public float height;
 
-    public float mouseX;
-    public float mouseY;
-    public float scrollY;
-    public float factor;
+    private float startMouseX;
+    private float startMouseY;
+
+    private float mouseX;
+    private float mouseY;
+    private float scrollY;
+    private float factor;
+
+    private float pi = Mathf.PI;
+    private float cr = Mathf.Deg2Rad;
 
     public bool button3;
     public bool spaceBar;
@@ -89,8 +95,8 @@ public class CameraLock : MonoBehaviour {
         if (Input.GetMouseButtonDown(2))
         {
             button3 = true;
-            startMouseX = mouseX*10;
-            startMouseY = mouseY*10;
+            startMouseX = mouseX;
+            startMouseY = mouseY;
         }
         else if (Input.GetMouseButtonUp(2))
         {
@@ -103,19 +109,21 @@ public class CameraLock : MonoBehaviour {
 
         if (button3)
         {
-            angleXoffset = mouseX*10 - startMouseX;
-            angleZoffset = mouseY*10 - startMouseY;
-            angleZoffset = Mathf.Clamp(angleZoffset, -70f+angleZ, 30f+angleZ);
+            angleXoffset = 10 * (mouseX - startMouseX);
+            angleZoffset = 10 * (mouseY - startMouseY);
+            angleZoffset = Mathf.Clamp(angleZoffset, -89f+angleZ, -30f+angleZ);
         }
 
         currentY += 2 * scrollY;
         currentY = Mathf.Clamp(currentY, 0.1f, 10f);
-        angleZ = Mathf.Clamp(angleZ, -30f, 70f);
+        angleZ = Mathf.Clamp(angleZ, 30f, 89f);
 
-        float x = currentX + currentY * Mathf.Cos(((angleX-angleXoffset)*3.14f)/180.0f);
-        float z = currentZ + currentY * Mathf.Sin(((angleX-angleXoffset)*3.14f)/180.0f);
-        float distance = Vector3.Distance(new Vector3(x, 0f, z), new Vector3(currentX, 0f, currentZ));
-        float y = currentY + distance*Mathf.Tan(((angleZ-angleZoffset)*3.14f)/180.0f);
+        radius = currentY * Mathf.Sin(pi/2-cr*(angleZ-angleZoffset));
+        height = currentY * Mathf.Sin(cr*(angleZ-angleZoffset));
+
+        float x = currentX + radius * Mathf.Cos(cr*(angleX-angleXoffset));
+        float z = currentZ + radius * Mathf.Sin(cr*(angleX-angleXoffset));
+        float y = height;
         
         transform.position = new Vector3(x, y, z);
         transform.LookAt(new Vector3(currentX,0.1f,currentZ));
@@ -125,7 +133,7 @@ public class CameraLock : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Space)) {
             spaceBar = !spaceBar;
             angleX = -90.0f;
-            angleZ = 70.0f;
+            angleZ = 89.0f;
         }
 
         if (!spaceBar)
