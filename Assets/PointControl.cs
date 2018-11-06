@@ -32,6 +32,8 @@ public class PointControl : MonoBehaviour {
     private float a = 0.9f;
     private float b = 1.0f;
     private float moveSpeed = 0.1f;
+    private float min = 0.0f;
+    private float max = 1.0f;
 
     public class Tetrahedron {
         public Vector3 A { get; set; }
@@ -75,6 +77,13 @@ public class PointControl : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+        side0set = Mathf.Clamp(side0set, min, max);
+        side1set = Mathf.Clamp(side1set, min, max);
+        side2set = Mathf.Clamp(side2set, min, max);
+        side3set = Mathf.Clamp(side3set, min, max);
+        side4set = Mathf.Clamp(side4set, min, max);
+        side5set = Mathf.Clamp(side5set, min, max);
+
         side0 = Mathf.SmoothDamp(side0, side0set + b, ref side0vel, 1.0f);
         side1 = Mathf.SmoothDamp(side1, side1set + b, ref side1vel, 1.0f);
         side2 = Mathf.SmoothDamp(side2, side2set + b, ref side2vel, 1.0f);

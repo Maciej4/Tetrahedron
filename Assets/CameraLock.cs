@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraLock : MonoBehaviour {
 
     public float currentX = 0.0f;
-    public float currentY = 2.0f;
+    public float currentY = 4.0f;
     public float currentZ = 0.0f;
 
     public float angleX = 90;
