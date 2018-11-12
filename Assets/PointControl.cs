@@ -91,13 +91,6 @@ public class PointControl : MonoBehaviour {
         side4 = Mathf.SmoothDamp(side4, side4set + b, ref side4vel, 1.0f);
         side5 = Mathf.SmoothDamp(side5, side5set + b, ref side5vel, 1.0f);
 
-        //side0 += moveSpeed * ((side0set * a + b) - side0);
-        //side1 += moveSpeed * ((side1set * a + b) - side1);
-        //side2 += moveSpeed * ((side2set * a + b) - side2);
-        //side3 += moveSpeed * ((side3set * a + b) - side3);
-        //side4 += moveSpeed * ((side4set * a + b) - side4);
-        //side5 += moveSpeed * ((side5set * a + b) - side5);
-
         Tetrahedron t = edge_input(side0*a+b, side1*a+b, side2*a+b, side3*a+b, side4*a+b, side5*a+b);
         alpha.transform.localPosition = t.A;
         beta.transform.localPosition = t.B;
