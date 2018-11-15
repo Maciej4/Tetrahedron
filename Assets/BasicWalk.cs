@@ -15,25 +15,19 @@ public class BasicWalk : MonoBehaviour {
     private Vector3 cPos;
     private Vector3 dPos;
 
-    public List<Transform> distanceSortedList;
+    private List<Transform> distanceSortedList;
     private List<Transform> heightSortedList;
-    public List<Transform> groundSortedList;
+    private List<Transform> groundSortedList;
 
     public bool walking;
     public bool startWalk = false;
     public bool kinematicsEnabled = true;
     private int walkSide = 0;
     private int highestPoint = 0;
-    //private float[] startArray = { 1.0f, 0.0f, 0.5f, 0.0f, 0.5f, 1.0f };
-    private float[] startArray = { 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
     public float[] setArray = { };
     private int curHighPoint;
 
     private int[][] pointSideArray = {   
-        //new int[] {11, 0, 4, 3 },
-        //new int[] {0, 12, 2, 1 },
-        //new int[] {4, 2, 13, 5 },
-        //new int[] {3, 1, 5, 14 }
         new int[] {11, 0, 1, 2 },
         new int[] {0, 12, 3, 4 },
         new int[] {1, 3, 13, 5 },
@@ -45,20 +39,21 @@ public class BasicWalk : MonoBehaviour {
         int p0 = findTransform(groundSortedList[0]);
         int p1 = findTransform(groundSortedList[1]);
         int p2 = findTransform(groundSortedList[2]);
-        int p3 = highestPoint; /*
-        int a0 = pointSide(p0, p1);
-        int a1 = pointSide(p0, p2);
-        int a2 = pointSide(p0, p3);
-        int a3 = pointSide(p1, p2);
-        int a4 = pointSide(p1, p3);
-        int a5 = pointSide(p2, p3); */
+        int p3 = highestPoint;
         int a0 = pointSide(p0, p1);
         int a1 = pointSide(p1, p3);
         int a2 = pointSide(p1, p2);
         int a3 = pointSide(p0, p3);
         int a4 = pointSide(p0, p2);
         int a5 = pointSide(p3, p2);
-        return new float[] { startArray[a0], startArray[a1], startArray[a2], startArray[a3], startArray[a4], startArray[a5] };
+        float[] output =  { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+        output[a0] = 1.0f;
+        output[a1] = 0.3f;
+        output[a2] = 0.0f;
+        output[a3] = 0.3f;
+        output[a4] = 0.0f;
+        output[a5] = 1.0f;
+        return output;
     }
 
     void stopWalking() {
