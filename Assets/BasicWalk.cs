@@ -21,11 +21,12 @@ public class BasicWalk : MonoBehaviour {
 
     public bool walking;
     public bool startWalk = false;
-    public bool kinematicsEnabled = true;
+    private bool kinematicsEnabled = true;
     private int walkSide = 0;
     private int highestPoint = 0;
     public float[] setArray = { };
     private int curHighPoint;
+    //private float lastRun;
 
     private int[][] pointSideArray = {   
         new int[] {11, 0, 1, 2 },
@@ -62,7 +63,7 @@ public class BasicWalk : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        
+        lastRun = Time.time;
     }
 
     int findTransform(Transform t) {
@@ -104,9 +105,9 @@ public class BasicWalk : MonoBehaviour {
         else if (heightSortedList[3].Equals(groundSortedList[3])) { groundSortedList.RemoveAt(3); }
         
     }
-	
-	// Update is called once per frame
-	void Update() {
+
+    // Update is called once per frame
+    void Update() {
         calcDist();
         int closestPoint1 = findTransform(groundSortedList[0]);
         int closestPoint2 = findTransform(groundSortedList[1]);
@@ -133,6 +134,11 @@ public class BasicWalk : MonoBehaviour {
         {
             zero();
         }
+
+        //if (lastRun + 0.05 <= Time.time) {
+        //    kinematicsEnabled = !kinematicsEnabled;
+        //    lastRun = Time.time;
+        //}
 
         if (!(curHighPoint == highestPoint)) { stopWalking(); }
 
