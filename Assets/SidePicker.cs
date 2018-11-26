@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SidePicker : MonoBehaviour {
-    public MeshRenderer alpha;
-    public MeshRenderer beta;
-    public MeshRenderer charlie;
-    public MeshRenderer delta;
+    private Context context;
+
+    private MeshRenderer alpha;
+    private MeshRenderer beta;
+    private MeshRenderer charlie;
+    private MeshRenderer delta;
 
     private bool[] colorState = {false, false, false, false};
 
@@ -14,8 +16,8 @@ public class SidePicker : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		
-	}
+        
+    }
 
     private void UpdateColors()
     {
@@ -41,6 +43,12 @@ public class SidePicker : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+        context = this.gameObject.GetComponent<Context>();
+        alpha = context.renderers[0];
+        beta = context.renderers[1];
+        charlie = context.renderers[2];
+        delta = context.renderers[3];
+
         targetSide = targetSide % 6;
         setFalse();
 

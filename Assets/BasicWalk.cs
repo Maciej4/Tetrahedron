@@ -5,10 +5,12 @@ using System.Linq;
 using UnityEngine;
 
 public class BasicWalk : MonoBehaviour {
-    public PointControl targetController;
     public Transform goalTransform;
-    public SidePicker sidePicker;
-    public Rigidbody targetRigidbody;
+
+    private Context context;
+    private PointControl pointController;
+    private SidePicker sidePicker;
+    private Rigidbody targetRigidbody;
 
     private Vector3 aPos;
     private Vector3 bPos;
@@ -21,12 +23,18 @@ public class BasicWalk : MonoBehaviour {
 
     public bool walking;
     public bool startWalk = false;
-    private bool kinematicsEnabled = true;
+    //private bool kinematicsEnabled = true;
     private int walkSide = 0;
     private int highestPoint = 0;
     public float[] setArray = { };
     private int curHighPoint;
     //private float lastRun;
+
+    // Use this for initialization
+    void Start()
+    {
+        //lastRun = Time.time;
+    }
 
     private int[][] pointSideArray = {   
         new int[] {11, 0, 1, 2 },
@@ -61,17 +69,12 @@ public class BasicWalk : MonoBehaviour {
         walking = false;
     }
 
-    // Use this for initialization
-    void Start() {
-        lastRun = Time.time;
-    }
-
     int findTransform(Transform t) {
         int z = 4;
-        if (t.Equals(targetController.alpha)) { z = 0; }
-        else if (t.Equals(targetController.beta)) { z = 1; }
-        else if (t.Equals(targetController.charlie)) { z = 2; }
-        else if (t.Equals(targetController.delta)) { z = 3; }
+        if (t.Equals(context.transforms[1])) { z = 0; }
+        else if (t.Equals(context.transforms[2])) { z = 1; }
+        else if (t.Equals(context.transforms[3])) { z = 2; }
+        else if (t.Equals(context.transforms[4])) { z = 3; }
         return z;
     }
 
@@ -81,20 +84,20 @@ public class BasicWalk : MonoBehaviour {
     }
 
     void zero() {
-        targetController.side0set = 0.0f;
-        targetController.side1set = 0.0f;
-        targetController.side2set = 0.0f;
-        targetController.side3set = 0.0f;
-        targetController.side4set = 0.0f;
-        targetController.side5set = 0.0f;
+        pointController.side0set = 0.0f;
+        pointController.side1set = 0.0f;
+        pointController.side2set = 0.0f;
+        pointController.side3set = 0.0f;
+        pointController.side4set = 0.0f;
+        pointController.side5set = 0.0f;
     }
 
     void calcDist() {
         List<Transform> unsortedList = new List<Transform>();
-        unsortedList.Add(targetController.alpha);
-        unsortedList.Add(targetController.beta);
-        unsortedList.Add(targetController.charlie);
-        unsortedList.Add(targetController.delta);
+        unsortedList.Add(context.transforms[1]);
+        unsortedList.Add(context.transforms[2]);
+        unsortedList.Add(context.transforms[3]);
+        unsortedList.Add(context.transforms[4]);
         distanceSortedList = unsortedList.OrderBy(o => Vector3.Distance(o.transform.TransformPoint(Vector3.zero), goalTransform.position)).ToList();
         groundSortedList = distanceSortedList;
         heightSortedList = unsortedList.OrderBy(o => o.transform.TransformPoint(Vector3.zero).y).ToList();
@@ -108,6 +111,11 @@ public class BasicWalk : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        context = this.gameObject.GetComponent<Context>();
+        pointController = context.pointControl;
+        sidePicker = context.sidePicker;
+        targetRigidbody = this.gameObject.GetComponent<Rigidbody>();
+
         calcDist();
         int closestPoint1 = findTransform(groundSortedList[0]);
         int closestPoint2 = findTransform(groundSortedList[1]);
@@ -123,12 +131,12 @@ public class BasicWalk : MonoBehaviour {
 
         if (walking)
         {
-            targetController.side0set = setArray[0];
-            targetController.side1set = setArray[1];
-            targetController.side2set = setArray[2];
-            targetController.side3set = setArray[3];
-            targetController.side4set = setArray[4];
-            targetController.side5set = setArray[5];
+            pointController.side0set = setArray[0];
+            pointController.side1set = setArray[1];
+            pointController.side2set = setArray[2];
+            pointController.side3set = setArray[3];
+            pointController.side4set = setArray[4];
+            pointController.side5set = setArray[5];
         }
         else
         {
@@ -142,7 +150,7 @@ public class BasicWalk : MonoBehaviour {
 
         if (!(curHighPoint == highestPoint)) { stopWalking(); }
 
-        targetRigidbody.isKinematic = kinematicsEnabled;
+        //targetRigidbody.isKinematic = kinematicsEnabled;
         
         sidePicker.targetSide = walkSide;
     }

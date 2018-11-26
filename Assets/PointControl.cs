@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PointControl : MonoBehaviour {
-	public Transform alpha;
-	public Transform beta;
-	public Transform charlie;
-	public Transform delta;
+    public Context context;
+
+	private Transform alpha;
+	private Transform beta;
+	private Transform charlie;
+	private Transform delta;
 
     public float side0set = 0.0f;
     public float side1set = 0.0f;
@@ -50,8 +52,8 @@ public class PointControl : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-
-	}
+        
+    }
 
     Tetrahedron edge_input(float AsB_m, float AsC_m, float AsD_m, float BsC_m, float BsD_m, float CsD_m)
     {
@@ -77,6 +79,12 @@ public class PointControl : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
+        context = this.gameObject.GetComponent<Context>();
+        alpha = context.transforms[1];
+        beta = context.transforms[2];
+        charlie = context.transforms[3];
+        delta = context.transforms[4];
+
         side0set = Mathf.Clamp(side0set, min, max);
         side1set = Mathf.Clamp(side1set, min, max);
         side2set = Mathf.Clamp(side2set, min, max);
