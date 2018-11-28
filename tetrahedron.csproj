@@ -287,6 +287,7 @@
     <Compile Include="Assets\CameraLock.cs" />
     <Compile Include="Assets\Context.cs" />
     <Compile Include="Assets\LineScript.cs" />
+    <Compile Include="Assets\NewPoint.cs" />
     <Compile Include="Assets\PointControl.cs" />
     <Compile Include="Assets\SidePicker.cs" />
     <Compile Include="Assets\TerrainHeight.cs" />

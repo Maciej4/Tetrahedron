@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PointControl : MonoBehaviour {
+public class NewPoint : MonoBehaviour
+{
     private Context context;
 
-	private Transform alpha;
-	private Transform beta;
-	private Transform charlie;
-	private Transform delta;
+    private Transform alpha;
+    private Transform beta;
+    private Transform charlie;
+    private Transform delta;
 
     public float side0set = 0.0f;
     public float side1set = 0.0f;
@@ -25,11 +26,11 @@ public class PointControl : MonoBehaviour {
     private float side5vel = 0.0f;
 
     public float side0 = 1.0f;
-	public float side1 = 1.0f;
-	public float side2 = 1.0f;
-	public float side3 = 1.0f;
-	public float side4 = 1.0f;
-	public float side5 = 1.0f;
+    public float side1 = 1.0f;
+    public float side2 = 1.0f;
+    public float side3 = 1.0f;
+    public float side4 = 1.0f;
+    public float side5 = 1.0f;
 
     private float a = 0.9f;
     private float b = 1.0f;
@@ -37,12 +38,14 @@ public class PointControl : MonoBehaviour {
     private float min = 0.0f;
     private float max = 1.0f;
 
-    public class Tetrahedron {
+    public class Tetrahedron
+    {
         public Vector3 A { get; set; }
         public Vector3 B { get; set; }
         public Vector3 C { get; set; }
         public Vector3 D { get; set; }
-        public Tetrahedron() {
+        public Tetrahedron()
+        {
             A = new Vector3(0.0f, 0.0f, 0.0f);
             B = new Vector3(0.0f, 0.0f, 0.0f);
             C = new Vector3(0.0f, 0.0f, 0.0f);
@@ -51,8 +54,9 @@ public class PointControl : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start () {
-        
+    void Start()
+    {
+
     }
 
     Tetrahedron edge_input(float AsB_m, float AsC_m, float AsD_m, float BsC_m, float BsD_m, float CsD_m)
@@ -77,12 +81,14 @@ public class PointControl : MonoBehaviour {
         return t;
     }
 
-    public float limitHeight(float altitude) {
-        return Mathf.Clamp(altitude,0,0);
+    public float limitHeight(float altitude)
+    {
+        return Mathf.Clamp(altitude, 0, 0);
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
         context = this.gameObject.GetComponent<Context>();
         alpha = context.transforms[1];
         beta = context.transforms[2];
@@ -103,7 +109,7 @@ public class PointControl : MonoBehaviour {
         side4 = Mathf.SmoothDamp(side4, side4set + b, ref side4vel, 1.0f);
         side5 = Mathf.SmoothDamp(side5, side5set + b, ref side5vel, 1.0f);
 
-        Tetrahedron t = edge_input(side0*a+b, side1*a+b, side2*a+b, side3*a+b, side4*a+b, side5*a+b);
+        Tetrahedron t = edge_input(side0 * a + b, side1 * a + b, side2 * a + b, side3 * a + b, side4 * a + b, side5 * a + b);
         alpha.transform.localPosition = Vector3.MoveTowards(alpha.transform.localPosition, t.A, 0.1f);
         beta.transform.localPosition = Vector3.MoveTowards(beta.transform.localPosition, t.B, 0.1f);
         charlie.transform.localPosition = Vector3.MoveTowards(charlie.transform.localPosition, t.C, 0.1f);
