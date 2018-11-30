@@ -33,7 +33,6 @@ public class PointControl : MonoBehaviour {
 
     private float a = 0.9f;
     private float b = 1.0f;
-    private float moveSpeed = 0.1f;
     private float min = 0.0f;
     private float max = 1.0f;
 
@@ -82,7 +81,7 @@ public class PointControl : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
+    void FixedUpdate () {
         context = this.gameObject.GetComponent<Context>();
         alpha = context.transforms[1];
         beta = context.transforms[2];
@@ -108,5 +107,10 @@ public class PointControl : MonoBehaviour {
         beta.transform.localPosition = Vector3.MoveTowards(beta.transform.localPosition, t.B, 0.1f);
         charlie.transform.localPosition = Vector3.MoveTowards(charlie.transform.localPosition, t.C, 0.1f);
         delta.transform.localPosition = Vector3.MoveTowards(delta.transform.localPosition, t.D, 0.1f);
+
+        this.gameObject.GetComponent<Builder>().p0 = t.A;
+        this.gameObject.GetComponent<Builder>().p1 = t.B;
+        this.gameObject.GetComponent<Builder>().p2 = t.C;
+        this.gameObject.GetComponent<Builder>().p3 = t.D;
     }
 }

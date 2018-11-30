@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TerrainHeight : MonoBehaviour {
-    private float x;
-    private float y;
-    private float z;
+    public float y;
+    public float height;
 
 	// Use this for initialization
 	void Start () {
@@ -13,13 +12,15 @@ public class TerrainHeight : MonoBehaviour {
 	}
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         Vector3 pos = transform.position;
-        x = transform.position.x;
         y = transform.position.y;
-        z = transform.position.z;
-        pos.y = Terrain.activeTerrain.SampleHeight(new Vector3(x, y-0.25f, z))+0.25f;
-        transform.position = pos;
+        height = Terrain.activeTerrain.SampleHeight(transform.position);
+        pos.y = height;
+        if (y <= pos.y+0.5f) {
+            pos.y += 0.01f;
+            transform.position = pos;
+        }
     }
 }

@@ -34,7 +34,6 @@ public class NewPoint : MonoBehaviour
 
     private float a = 0.9f;
     private float b = 1.0f;
-    private float moveSpeed = 0.1f;
     private float min = 0.0f;
     private float max = 1.0f;
 
@@ -87,7 +86,7 @@ public class NewPoint : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         context = this.gameObject.GetComponent<Context>();
         alpha = context.transforms[1];

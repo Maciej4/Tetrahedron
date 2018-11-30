@@ -110,7 +110,7 @@ public class BasicWalk : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {
+    void FixedUpdate() {
         context = this.gameObject.GetComponent<Context>();
         pointController = context.pointControl;
         sidePicker = context.sidePicker;

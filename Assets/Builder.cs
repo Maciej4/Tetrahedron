@@ -6,17 +6,27 @@ using System.Collections;
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(Rigidbody))]
 
+[ExecuteInEditMode]
 public class Builder : MonoBehaviour
 {
-    public float thrust = 10f;
-    public Rigidbody rigidBody = null;
     MeshFilter meshFilter = null;
     MeshCollider meshCollider = null;
 
+    public Vector3 p0 = new Vector3(0, 0, 0);
+    public Vector3 p1 = new Vector3(1, 0, 0);
+    public Vector3 p2 = new Vector3(0.5f, 0, Mathf.Sqrt(0.75f));
+    public Vector3 p3 = new Vector3(0.5f, Mathf.Sqrt(0.75f), Mathf.Sqrt(0.75f) / 3);
+
     void Start()
     {
+
+    }
+
+    // Update is called once per frame
+    
+    void Update()
+    {
         meshFilter = GetComponent<MeshFilter>();
-        rigidBody = GetComponent<Rigidbody>();
         meshCollider = GetComponent<MeshCollider>();
 
         if (meshFilter == null)
@@ -24,11 +34,6 @@ public class Builder : MonoBehaviour
             Debug.LogError("MeshFilter not found!");
             return;
         }
-
-        Vector3 p0 = new Vector3(0, 0, 0);
-        Vector3 p1 = new Vector3(1, 0, 0);
-        Vector3 p2 = new Vector3(0.5f, 0, Mathf.Sqrt(0.75f));
-        Vector3 p3 = new Vector3(0.5f, Mathf.Sqrt(0.75f), Mathf.Sqrt(0.75f) / 3);
 
         Mesh mesh = meshFilter.sharedMesh;
         if (mesh == null)
@@ -69,16 +74,5 @@ public class Builder : MonoBehaviour
 
         meshCollider.sharedMesh = mesh;
         meshCollider.convex = true;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKey(KeyCode.Space))
-        {
-            Debug.Log("Adding force");
-            rigidBody.AddForce(Vector3.up * thrust, ForceMode.Impulse);
-            rigidBody.AddTorque(Vector3.right * 0.01f, ForceMode.Impulse);
-        }
     }
 }
