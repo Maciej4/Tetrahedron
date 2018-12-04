@@ -5,10 +5,10 @@ using UnityEngine;
 public class PointControl : MonoBehaviour {
     private Context context;
 
-	//private Transform alpha;
-	//private Transform beta;
-	//private Transform charlie;
-	//private Transform delta;
+	private Transform alpha;
+	private Transform beta;
+	private Transform charlie;
+	private Transform delta;
 
     public float side0set = 0.0f;
     public float side1set = 0.0f;
@@ -83,10 +83,10 @@ public class PointControl : MonoBehaviour {
     // Update is called once per frame
     void FixedUpdate () {
         context = this.gameObject.GetComponent<Context>();
-        //alpha = context.transforms[1];
-        //beta = context.transforms[2];
-        //charlie = context.transforms[3];
-        //delta = context.transforms[4];
+        alpha = context.transforms[1];
+        beta = context.transforms[2];
+        charlie = context.transforms[3];
+        delta = context.transforms[4];
 
         side0set = Mathf.Clamp(side0set, min, max);
         side1set = Mathf.Clamp(side1set, min, max);
@@ -103,14 +103,9 @@ public class PointControl : MonoBehaviour {
         side5 = Mathf.SmoothDamp(side5, side5set + b, ref side5vel, 1.0f);
 
         Tetrahedron t = edge_input(side0*a+b, side1*a+b, side2*a+b, side3*a+b, side4*a+b, side5*a+b);
-        //alpha.transform.localPosition = Vector3.MoveTowards(alpha.transform.localPosition, t.A, 0.1f);
-        //beta.transform.localPosition = Vector3.MoveTowards(beta.transform.localPosition, t.B, 0.1f);
-        //charlie.transform.localPosition = Vector3.MoveTowards(charlie.transform.localPosition, t.C, 0.1f);
-        //delta.transform.localPosition = Vector3.MoveTowards(delta.transform.localPosition, t.D, 0.1f);
-
-        this.gameObject.GetComponent<Builder>().p0 = t.A;
-        this.gameObject.GetComponent<Builder>().p1 = t.B;
-        this.gameObject.GetComponent<Builder>().p2 = t.C;
-        this.gameObject.GetComponent<Builder>().p3 = t.D;
+        alpha.transform.localPosition = Vector3.MoveTowards(alpha.transform.localPosition, t.A, 0.1f);
+        beta.transform.localPosition = Vector3.MoveTowards(beta.transform.localPosition, t.B, 0.1f);
+        charlie.transform.localPosition = Vector3.MoveTowards(charlie.transform.localPosition, t.C, 0.1f);
+        delta.transform.localPosition = Vector3.MoveTowards(delta.transform.localPosition, t.D, 0.1f);
     }
 }
