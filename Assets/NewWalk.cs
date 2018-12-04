@@ -22,7 +22,6 @@ public class NewWalk : MonoBehaviour {
     public bool walking;
     public bool startWalk = false;
     //private bool kinematicsEnabled = true;
-    private int walkSide = 0;
     private int highestPoint = 0;
     public float[] setArray = { };
     private int curHighPoint;
@@ -73,10 +72,10 @@ public class NewWalk : MonoBehaviour {
     int findTransform(Transform t)
     {
         int z = 4;
-        if (t.Equals(builder.p0)) { z = 0; }
-        else if (t.Equals(builder.p1)) { z = 1; }
-        else if (t.Equals(builder.p2)) { z = 2; }
-        else if (t.Equals(builder.p3)) { z = 3; }
+        if (t.Equals(transforms[1])) { z = 0; }
+        else if (t.Equals(transforms[2])) { z = 1; }
+        else if (t.Equals(transforms[3])) { z = 2; }
+        else if (t.Equals(transforms[4])) { z = 3; }
         return z;
     }
 
@@ -98,10 +97,10 @@ public class NewWalk : MonoBehaviour {
     void calcDist()
     {
         List<Transform> unsortedList = new List<Transform>();
-        transforms[1].position = builder.p0;
-        transforms[2].position = builder.p1;
-        transforms[3].position = builder.p2;
-        transforms[4].position = builder.p3;
+        transforms[1].localPosition = builder.p0;
+        transforms[2].localPosition = builder.p1;
+        transforms[3].localPosition = builder.p2;
+        transforms[4].localPosition = builder.p3;
         unsortedList.Add(transforms[1]);
         unsortedList.Add(transforms[2]);
         unsortedList.Add(transforms[3]);
@@ -122,9 +121,6 @@ public class NewWalk : MonoBehaviour {
     {
         transforms = this.gameObject.GetComponentsInChildren<Transform>();
         calcDist();
-        int closestPoint1 = findTransform(groundSortedList[0]);
-        int closestPoint2 = findTransform(groundSortedList[1]);
-        walkSide = pointSide(closestPoint1, closestPoint2);
 
         if (startWalk && !walking)
         {

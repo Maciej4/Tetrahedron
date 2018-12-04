@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 [RequireComponent(typeof(MeshCollider))]
 [RequireComponent(typeof(MeshFilter))]
@@ -161,6 +162,7 @@ public class Builder : MonoBehaviour
             uv0,uv1,uv2
         };
 
+        mesh.triangles = mesh.triangles.Reverse().ToArray();
 
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
