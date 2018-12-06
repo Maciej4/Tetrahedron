@@ -291,6 +291,7 @@
     <Compile Include="Assets\NewWalk.cs" />
     <Compile Include="Assets\PointControl.cs" />
     <Compile Include="Assets\SidePicker.cs" />
+    <Compile Include="Assets\SwarmController.cs" />
     <Compile Include="Assets\TerrainHeight.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

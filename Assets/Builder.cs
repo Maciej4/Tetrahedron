@@ -43,6 +43,7 @@ public class Builder : MonoBehaviour
     private float b = 1.0f;
     private float min = 0.0f;
     private float max = 1.0f;
+    public bool colorPicked = false;
 
     public class Tetrahedron
     {
@@ -85,11 +86,6 @@ public class Builder : MonoBehaviour
         t.C = new Vector3(rx, ry, 0.0f);
         t.D = new Vector3(sx, sy, sz);
         return t;
-    }
-
-    public float limitHeight(float altitude)
-    {
-        return Mathf.Clamp(altitude, 0, 0);
     }
 
     public void calcPoints()
@@ -137,6 +133,7 @@ public class Builder : MonoBehaviour
         }
 
         mesh.Clear();
+
         mesh.vertices = new Vector3[]{
             p0,p1,p2,
             p0,p2,p3,
