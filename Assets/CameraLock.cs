@@ -26,7 +26,7 @@ public class CameraLock : MonoBehaviour {
     private float mouseX;
     private float mouseY;
     private float scrollY;
-    private float factor;
+    //private float factor;
 
     private float pi = Mathf.PI;
     private float cr = Mathf.Deg2Rad;
@@ -48,7 +48,7 @@ public class CameraLock : MonoBehaviour {
         
         if (!spaceBar)
         {
-            factor = scrollFactor(currentY);
+            //factor = scrollFactor(currentY);
             mouseX = e.mousePosition.x / (200f * scrollFactor(currentY));
             mouseY = e.mousePosition.y / (200f * scrollFactor(currentY));
         }

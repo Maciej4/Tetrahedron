@@ -282,17 +282,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\BasicWalk.cs" />
-    <Compile Include="Assets\Builder.cs" />
     <Compile Include="Assets\CameraLock.cs" />
-    <Compile Include="Assets\Context.cs" />
-    <Compile Include="Assets\LineScript.cs" />
-    <Compile Include="Assets\NewPoint.cs" />
-    <Compile Include="Assets\NewWalk.cs" />
-    <Compile Include="Assets\PointControl.cs" />
-    <Compile Include="Assets\SidePicker.cs" />
     <Compile Include="Assets\SwarmController.cs" />
-    <Compile Include="Assets\TerrainHeight.cs" />
+    <Compile Include="Assets\TetraController.cs" />
+    <Compile Include="Assets\WalkController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
