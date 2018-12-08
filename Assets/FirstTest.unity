@@ -305,39 +305,35 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4846058598100834, guid: 3c7d26bcd67bc924787814995d38599d, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 214.08
+      value: 230
       objectReference: {fileID: 0}
     - target: {fileID: 4846058598100834, guid: 3c7d26bcd67bc924787814995d38599d, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 2.29
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4846058598100834, guid: 3c7d26bcd67bc924787814995d38599d, type: 2}
       propertyPath: m_LocalPosition.z
-      value: -230.17
+      value: 230
       objectReference: {fileID: 0}
     - target: {fileID: 4846058598100834, guid: 3c7d26bcd67bc924787814995d38599d, type: 2}
       propertyPath: m_LocalRotation.x
-      value: 0.5592779
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4846058598100834, guid: 3c7d26bcd67bc924787814995d38599d, type: 2}
       propertyPath: m_LocalRotation.y
-      value: 0.4326673
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4846058598100834, guid: 3c7d26bcd67bc924787814995d38599d, type: 2}
       propertyPath: m_LocalRotation.z
-      value: 0.43264303
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4846058598100834, guid: 3c7d26bcd67bc924787814995d38599d, type: 2}
       propertyPath: m_LocalRotation.w
-      value: -0.5593097
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4846058598100834, guid: 3c7d26bcd67bc924787814995d38599d, type: 2}
       propertyPath: m_RootOrder
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1425880987260530, guid: 3c7d26bcd67bc924787814995d38599d, type: 2}
-      propertyPath: m_TagString
-      value: MainTetrahedron
       objectReference: {fileID: 0}
     - target: {fileID: 1425880987260530, guid: 3c7d26bcd67bc924787814995d38599d, type: 2}
       propertyPath: m_Name
@@ -560,6 +556,8 @@ MonoBehaviour:
   tetrobotsToMake: 0
   makeQueued: 0
   tetrahedronCount: 0
+  armDestroyAll: 0
+  destroyAll: 0
 --- !u!4 &1509339672
 Transform:
   m_ObjectHideFlags: 0

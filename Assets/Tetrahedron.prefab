@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 64421500731388098}
   m_Layer: 0
   m_Name: Tetrahedron
-  m_TagString: Untagged
+  m_TagString: MainTetrahedron
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -137,8 +137,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1425880987260530}
-  m_LocalRotation: {x: 0.5592779, y: 0.4326673, z: 0.43264303, w: -0.5593097}
-  m_LocalPosition: {x: 0, y: 10, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 230, y: 2, z: 230}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4991347016178950}
@@ -280,6 +280,6 @@ MonoBehaviour:
   - 0
   - 0
   - 0
-  startWalkTime: 242.78
-  currentTime: 262
-  endTime: 249.78
+  startWalkTime: 0
+  currentTime: 0
+  endTime: 0

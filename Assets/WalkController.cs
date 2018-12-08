@@ -18,7 +18,9 @@ public class WalkController : MonoBehaviour {
     private List<Transform> heightSortedList;
     public List<Transform> finalSortedList;
 
-    public bool walking;
+    public bool walking = false;
+    public bool continuousWalk = false;
+    private float currentEndDistance;
     public bool initWalk = false;
     //private bool kinematicsEnabled = true;
     public float[] setArray = { };
@@ -76,7 +78,18 @@ public class WalkController : MonoBehaviour {
 
     public void stopWalking()
     {
+        continuousWalk = false;
         walking = false;
+    }
+
+    public void startContinuousWalk(Transform newTargetTransform, float endDistance = 2.0f)
+    {
+        continuousWalk = true;
+        if (!(newTargetTransform == null))
+        {
+            goalTransform = newTargetTransform;
+        }
+        currentEndDistance = endDistance;
     }
 
     private int findVertex(Transform t)
