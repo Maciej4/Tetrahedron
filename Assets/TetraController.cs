@@ -27,12 +27,15 @@ public class TetraController : MonoBehaviour
 
     private float[] sideLength = { 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f };
 
+    public Transform[] transforms;
+
     private float a = 0.9f;
     private float b = 1.0f;
     private float min = 0.0f;
     private float max = 1.0f;
     public bool colorPicked = false;
     private Color pickedColor;
+    public Vector3 centerMass;
 
     public class Tetrahedron
     {
@@ -77,6 +80,22 @@ public class TetraController : MonoBehaviour
         return t;
     }
 
+    public Vector3 calcCOM()
+    {
+        float averagedX = 0.0f;
+        float averagedY = 0.0f;
+        float averagedZ = 0.0f;
+        for (int i = 1; i < 5; i++) {
+            averagedX += transforms[i].position.x;
+            averagedY += transforms[i].position.y;
+            averagedZ += transforms[i].position.z;
+        }
+        averagedX /= 4.0f;
+        averagedY /= 4.0f;
+        averagedZ /= 4.0f;
+        return new Vector3(averagedX, averagedY, averagedZ);
+    }
+
     public void calcPoints()
     {
         sideSet[0] = Mathf.Clamp(sideSet[0], min, max);
@@ -103,10 +122,19 @@ public class TetraController : MonoBehaviour
         point[1] = t.B;
         point[2] = t.C;
         point[3] = t.D;
+
+        transforms[1].localPosition = point[0];
+        transforms[2].localPosition = point[1];
+        transforms[3].localPosition = point[2];
+        transforms[4].localPosition = point[3];
     }
 
     void FixedUpdate()
     {
+        transforms = this.gameObject.GetComponentsInChildren<Transform>();
+
+        centerMass = calcCOM();
+
         calcPoints();
 
         if (!colorPicked) {

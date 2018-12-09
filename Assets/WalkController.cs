@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 public class WalkController : MonoBehaviour {
-    private Transform goalTransform;
+    public Vector3 goalPos = new Vector3(220.0f, -0.5f, 220.0f);
 
     private TetraController builder;
 
@@ -72,23 +72,19 @@ public class WalkController : MonoBehaviour {
         initWalk = true;
         if (!(newTargetTransform == null))
         {
-            goalTransform = newTargetTransform;
+            goalPos = newTargetTransform.position;
         }
     }
 
     public void stopWalking()
     {
-        continuousWalk = false;
         walking = false;
     }
 
     public void startContinuousWalk(Transform newTargetTransform, float endDistance = 2.0f)
     {
         continuousWalk = true;
-        if (!(newTargetTransform == null))
-        {
-            goalTransform = newTargetTransform;
-        }
+        goalPos = newTargetTransform.position;
         currentEndDistance = endDistance;
     }
 
@@ -121,15 +117,11 @@ public class WalkController : MonoBehaviour {
     {
         List<Transform> unsortedList = new List<Transform>();
         List<Transform> heightSortedList = new List<Transform>();
-        transforms[1].localPosition = builder.point[0];
-        transforms[2].localPosition = builder.point[1];
-        transforms[3].localPosition = builder.point[2];
-        transforms[4].localPosition = builder.point[3];
         unsortedList.Add(transforms[1]);
         unsortedList.Add(transforms[2]);
         unsortedList.Add(transforms[3]);
         unsortedList.Add(transforms[4]);
-        finalSortedList = unsortedList.OrderBy(o => Vector3.Distance(o.position, goalTransform.position)).ToList();
+        finalSortedList = unsortedList.OrderBy(o => Vector3.Distance(o.position, goalPos)).ToList();
         heightSortedList = unsortedList.OrderBy(o => o.position.y).ToList();
         if (heightSortedList[3].Equals(finalSortedList[0])) { finalSortedList.RemoveAt(0); }
         else if (heightSortedList[3].Equals(finalSortedList[1])) { finalSortedList.RemoveAt(1); }
@@ -142,8 +134,6 @@ public class WalkController : MonoBehaviour {
     void FixedUpdate()
     {
         transforms = this.gameObject.GetComponentsInChildren<Transform>();
-
-        if (goalTransform == null) { goalTransform = transforms[0]; }
 
         calcDist();
 
@@ -163,6 +153,20 @@ public class WalkController : MonoBehaviour {
         else
         {
             zero();
+        }
+
+        if (continuousWalk)
+        {
+            if (Vector3.Distance(builder.centerMass, goalPos) < currentEndDistance)
+            {
+                continuousWalk = false;
+                goalPos = new Vector3(220.0f, -0.5f, 220.0f);
+            }
+
+            if (!walking)
+            {
+                initWalk = true;
+            }
         }
 
         currentTime = Time.time;
