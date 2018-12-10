@@ -36,6 +36,8 @@ public class TetraController : MonoBehaviour
     public bool colorPicked = false;
     private Color pickedColor;
     public Vector3 centerMass;
+    public bool wantsToConnect = false;
+    public TetraController connectTarget = null;
 
     public class Tetrahedron
     {
