@@ -284,8 +284,10 @@
   <ItemGroup>
     <Compile Include="Assets\CameraController.cs" />
     <Compile Include="Assets\DockController.cs" />
+    <Compile Include="Assets\GlobController.cs" />
     <Compile Include="Assets\SwarmController.cs" />
     <Compile Include="Assets\TetraController.cs" />
+    <Compile Include="Assets\VertexController.cs" />
     <Compile Include="Assets\WalkController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -46,7 +46,7 @@ public class SwarmController : MonoBehaviour {
             }
         }
 
-        tetrahedronCount = this.gameObject.GetComponent<Transform>().childCount;
+        tetrahedronCount = this.gameObject.GetComponentsInChildren<TetraController>().Length;
 
         if (makeQueued) {
             for (int i = 0; i < tetrobotsToMake; i++) {

@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DockController : MonoBehaviour {
-    public TetraController[] tetraControllers;
+    public Transform globPrefab;
 
 	// Use this for initialization
 	void Start () {
 		
 	}
+
+    void makeGlob() {
+        Transform go = Instantiate(globPrefab, new Vector3(0f, 0f, 0f), Quaternion.identity);
+        go.transform.parent = transform;
+        go.tag = "Untagged";
+        go.name = "Glob " + (this.GetComponentsInChildren<GlobController>().Length).ToString("000");
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        tetraControllers = this.gameObject.GetComponentsInChildren<TetraController>();
+        globPrefab = GameObject.FindGameObjectWithTag("MainTetrahedron").transform;
 
-        for (int i = 0; i < tetraControllers.Length; i++)
-        {
-            if (Vector3.Distance(tetraControllers[i].centerMass, tetraControllers[i].connectTarget.centerMass) < 2.0f)
-            {
-
-            }
-        }
     }
 }
