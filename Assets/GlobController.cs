@@ -41,6 +41,7 @@ public class GlobController : MonoBehaviour
     public Vector3 centerMass;
     public bool wantsToConnect = false;
     public TetraController connectTarget = null;
+    public Quaternion rotation;
 
     public class Tetrahedron
     {
@@ -87,6 +88,11 @@ public class GlobController : MonoBehaviour
         t.C = new Vector3(rx, ry, 0.0f);
         t.D = new Vector3(sx, sy, sz);
         return t;
+    }
+
+    public Quaternion findRotation(Vector3 v3Pos1, Vector3 v3Pos2) 
+    {
+        return Quaternion.FromToRotation(point[2], v3Pos2 - v3Pos1);
     }
 
     public void makeVertex()
@@ -176,6 +182,12 @@ public class GlobController : MonoBehaviour
         findVertices();
 
         centerMass = calcCOM();
+
+        rotation.z = Quaternion.FromToRotation(Vector3.right, new Vector3(0, point[2].y, 0)).z;
+        //rotation.z = rotation.z - Mathf.PI / 2.0f;
+
+        // Sets the rotation so that the transform's y-axis goes along the z-axis
+        //transform.rotation = Quaternion.FromToRotation(Vector3.up, transform.forward);
 
         calcPoints();
 

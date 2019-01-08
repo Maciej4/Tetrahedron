@@ -1,0 +1,16 @@
+﻿<Properties StartupConfiguration="{4D2FFCD9-9BB7-CF16-2FE8-D68C3BFD5C0C}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/CylinderController.cs">
+    <Files>
+      <File FileName="Assets/GlobController.cs" Line="189" Column="34" />
+      <File FileName="Assets/CylinderController.cs" Line="30" Column="28" />
+      <File FileName="Assets/CameraController.cs" Line="23" Column="37" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="Unity.Editor" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
