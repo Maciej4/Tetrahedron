@@ -59,8 +59,16 @@ public class CameraController : MonoBehaviour {
 
             for (int i = 0; i < selectedTetrahedrons.Count; i++)
             {
-                totalAverageX += selectedTetrahedrons[i].GetComponent<TetraController>().centerMass.x;
-                totalAverageZ += selectedTetrahedrons[i].GetComponent<TetraController>().centerMass.z;
+                if (selectedTetrahedrons[i].GetComponent<TetraController>() != null)
+                {
+                    totalAverageX += selectedTetrahedrons[i].GetComponent<TetraController>().centerMass.x;
+                    totalAverageZ += selectedTetrahedrons[i].GetComponent<TetraController>().centerMass.z;
+                }
+                else if (selectedTetrahedrons[i].GetComponent<GlobController>() != null)
+                {
+                    totalAverageX += selectedTetrahedrons[i].GetComponent<GlobController>().centerMass.x;
+                    totalAverageZ += selectedTetrahedrons[i].GetComponent<GlobController>().centerMass.z;
+                }
             }
 
             newPosition.x = totalAverageX / (float)selectedTetrahedrons.Count;
@@ -136,20 +144,23 @@ public class CameraController : MonoBehaviour {
         //Placment of waypoint
         if (selectedTetrahedrons.Count > 0)
         {
-            if (selectedTetrahedrons.Count == 1)
+            if (selectedTetrahedrons.Count == 1 && (selectedTetrahedrons[0].GetComponent<WalkController>() != null))
             {
                 goalPoint.position = selectedTetrahedrons[0].GetComponent<WalkController>().goalPos;
             }
-            else
+            else if (selectedTetrahedrons[0].GetComponent<WalkController>() != null)
             {
                 bool allGoalsSame = true;
                 Vector3 refercnceGoal = selectedTetrahedrons[0].GetComponent<WalkController>().goalPos;
 
                 for (int i = 1; i < selectedTetrahedrons.Count; i++)
                 {
-                    if (!(selectedTetrahedrons[i].GetComponent<WalkController>().goalPos==refercnceGoal))
+                    if (selectedTetrahedrons[0].GetComponent<WalkController>() != null)
                     {
-                        allGoalsSame = false;
+                        if (!(selectedTetrahedrons[i].GetComponent<WalkController>().goalPos == refercnceGoal))
+                        {
+                            allGoalsSame = false;
+                        }
                     }
                 }
 
