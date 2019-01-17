@@ -62,10 +62,6 @@ public class GlobController : MonoBehaviour
     void Start()
     {
         colorPicked = false;
-        makeVertex();
-        makeVertex();
-        makeVertex();
-        makeVertex();
     }
 
     Tetrahedron edge_input(float AsB_m, float AsC_m, float AsD_m, float BsC_m, float BsD_m, float CsD_m)

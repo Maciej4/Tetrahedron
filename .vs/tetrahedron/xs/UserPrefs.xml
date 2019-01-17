@@ -1,11 +1,11 @@
 ﻿<Properties StartupConfiguration="{4D2FFCD9-9BB7-CF16-2FE8-D68C3BFD5C0C}|">
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/AdvTest2.cs">
     <Files>
-      <File FileName="Assets/GlobController.cs" Line="66" Column="22" />
+      <File FileName="Assets/GlobController.cs" Line="67" Column="35" />
       <File FileName="Assets/CylinderController.cs" Line="10" Column="21" />
       <File FileName="Assets/CameraController.cs" Line="12" Column="30" />
-      <File FileName="Assets/AdvTest.cs" Line="35" Column="52" />
-      <File FileName="Assets/AdvTest2.cs" Line="41" Column="62" />
+      <File FileName="Assets/AdvTest2.cs" Line="75" Column="44" />
+      <File FileName="Assets/AdvTest.cs" Line="94" Column="6" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
