@@ -14,6 +14,8 @@ public class GlobController : MonoBehaviour
 {
     MeshFilter meshFilter = null;
     MeshCollider meshCollider = null;
+    private TetraMath tm = new TetraMath();
+    private TetraRenderer tr;
 
     public Vector3[] point = new Vector3[4] {
         new Vector3(0, 0, 0),
@@ -28,7 +30,7 @@ public class GlobController : MonoBehaviour
 
     private float[] sideLength = { 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f };
 
-    public Transform[][] tetrahedrons;
+    public Transform[,] tetrahedrons = new Transform[1,4];
 
     public Transform[] vertices;
 
@@ -43,7 +45,7 @@ public class GlobController : MonoBehaviour
     public TetraController connectTarget = null;
     public Quaternion rotation;
 
-    public class Tetrahedron
+    /*public class Tetrahedron
     {
         public Vector3 A { get; set; }
         public Vector3 B { get; set; }
@@ -56,34 +58,16 @@ public class GlobController : MonoBehaviour
             C = new Vector3(0.0f, 0.0f, 0.0f);
             D = new Vector3(0.0f, 0.0f, 0.0f);
         }
-    }
+    }*/
 
     // Use this for initialization
+
     void Start()
     {
         colorPicked = false;
-    }
-
-    Tetrahedron edge_input(float AsB_m, float AsC_m, float AsD_m, float BsC_m, float BsD_m, float CsD_m)
-    {
-        float AsB_m2 = AsB_m * AsB_m;
-        float AsC_m2 = AsC_m * AsC_m;
-        float AsD_m2 = AsD_m * AsD_m;
-        float BsC_m2 = BsC_m * BsC_m;
-        float BsD_m2 = BsD_m * BsD_m;
-        float CsD_m2 = CsD_m * CsD_m;
-        float qx = AsB_m;
-        float rx = (AsB_m2 + AsC_m2 - BsC_m2) / (2.0f * AsB_m);
-        float ry = Mathf.Sqrt(AsC_m2 - rx * rx);
-        float sx = (AsB_m2 + AsD_m2 - BsD_m2) / (2.0f * AsB_m);
-        float sy = (BsD_m2 - (sx - qx) * (sx - qx) - CsD_m2 + (sx - rx) * (sx - rx) + ry * ry) / (2 * ry);
-        float sz = Mathf.Sqrt(AsD_m2 - sx * sx - sy * sy);
-        Tetrahedron t = new Tetrahedron();
-        t.A = new Vector3(0.0f, 0.0f, 0.0f);
-        t.B = new Vector3(qx, 0.0f, 0.0f);
-        t.C = new Vector3(rx, ry, 0.0f);
-        t.D = new Vector3(sx, sy, sz);
-        return t;
+        MeshFilter meshFilter_ = GetComponent<MeshFilter>();
+        MeshCollider meshCollider_ = GetComponent<MeshCollider>();
+        tr = new TetraRenderer(meshFilter_, meshCollider_);
     }
 
     public Quaternion findRotation(Vector3 v3Pos1, Vector3 v3Pos2) 
@@ -156,7 +140,7 @@ public class GlobController : MonoBehaviour
         sideLength[4] = Mathf.SmoothDamp(sideLength[4], sideSet[4] + b, ref sideVel[4], 1.0f);
         sideLength[5] = Mathf.SmoothDamp(sideLength[5], sideSet[5] + b, ref sideVel[5], 1.0f);
 
-        Tetrahedron t = edge_input(
+        Tetrahedron t = tm.edge_input(
             sideLength[0] * a + b, sideLength[1] * a + b,
             sideLength[2] * a + b, sideLength[3] * a + b,
             sideLength[4] * a + b, sideLength[5] * a + b
@@ -196,55 +180,29 @@ public class GlobController : MonoBehaviour
             colorPicked = true;
         }
 
-        meshFilter = GetComponent<MeshFilter>();
-        meshCollider = GetComponent<MeshCollider>();
+        //tetrahedrons[0, 0] = vertices[0];
+        //tetrahedrons[0, 1] = vertices[1];
+        //tetrahedrons[0, 2] = vertices[2];
+        //tetrahedrons[0, 3] = vertices[3];
 
-        if (meshFilter == null)
+        if (tr == null)
         {
-            Debug.LogError("MeshFilter not found!");
-            return;
+            MeshFilter meshFilter_ = GetComponent<MeshFilter>();
+            MeshCollider meshCollider_ = GetComponent<MeshCollider>();
+            tr = new TetraRenderer(meshFilter_, meshCollider_);
         }
 
-        Mesh mesh = meshFilter.sharedMesh;
-        if (mesh == null)
-        {
-            meshFilter.mesh = new Mesh();
-            mesh = meshFilter.sharedMesh;
-        }
+        tr.transforms[0, 0] = GetComponentsInChildren<Transform>()[1];
+        tr.transforms[0, 1] = GetComponentsInChildren<Transform>()[2];
+        tr.transforms[0, 2] = GetComponentsInChildren<Transform>()[3];
+        tr.transforms[0, 3] = GetComponentsInChildren<Transform>()[4];
 
-        mesh.Clear();
+        tr.transforms[1, 0] = GetComponentsInChildren<Transform>()[3];
+        tr.transforms[1, 1] = GetComponentsInChildren<Transform>()[2];
+        tr.transforms[1, 2] = GetComponentsInChildren<Transform>()[1];
+        tr.transforms[1, 3] = GetComponentsInChildren<Transform>()[5];
 
-        mesh.vertices = new Vector3[]{
-            point[0],point[1],point[2],
-            point[0],point[2],point[3],
-            point[2],point[1],point[3],
-            point[0],point[3],point[1]
-        };
-
-        mesh.triangles = new int[]{
-            0,1,2,
-            3,4,5,
-            6,7,8,
-            9,10,11
-        };
-
-        Vector2 uv0 = new Vector2(0, 0);
-        Vector2 uv1 = new Vector2(1, 0);
-        Vector2 uv2 = new Vector2(0.5f, 1);
-
-        mesh.uv = new Vector2[]{
-            uv0,uv1,uv2,
-            uv0,uv1,uv2,
-            uv0,uv1,uv2,
-            uv0,uv1,uv2
-        };
-
-        mesh.triangles = mesh.triangles.Reverse().ToArray();
-
-        mesh.RecalculateNormals();
-        mesh.RecalculateBounds();
-
-        meshCollider.sharedMesh = mesh;
-        meshCollider.convex = true;
+        tr.loop();
+        
     }
 }
