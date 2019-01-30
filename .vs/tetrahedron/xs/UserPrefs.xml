@@ -1,10 +1,10 @@
 ﻿<Properties StartupConfiguration="{4D2FFCD9-9BB7-CF16-2FE8-D68C3BFD5C0C}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/GlobController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/TetraRenderer.cs">
     <Files>
-      <File FileName="Assets/GlobController.cs" Line="91" Column="36" />
-      <File FileName="Assets/Side.cs" Line="8" Column="5" />
-      <File FileName="Assets/Vertex.cs" Line="8" Column="30" />
-      <File FileName="Assets/Tetrahedron.cs" Line="1" Column="1" />
+      <File FileName="Assets/GlobController.cs" Line="193" Column="22" />
+      <File FileName="Assets/TetraRenderer.cs" Line="75" Column="9" />
+      <File FileName="Assets/NewTetrahedron.cs" Line="41" Column="23" />
+      <File FileName="Assets/TetraUtil.cs" Line="52" Column="10" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Vertex : MonoBehaviour
+public class Vertex
 {
-    public Transform vertexTransform;
-    public Vector3 vertexPos;
+    public int ID { get; set; }
+    //public Transform vertexTransform;
+    public Vector3 pos = new Vector3(0.0f, 0.0f, 0.0f);
 
-    public Vertex(Transform _vertexTransform)
+    public Vertex(int ID_)
     {
-        vertexTransform = _vertexTransform;
+        ID = ID_;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -6,13 +7,24 @@ public class TetraRenderer
 {
     public MeshFilter meshFilter;
     public MeshCollider meshCollider;
+    public MeshRenderer meshRenderer;
     public Transform[,] transforms = new Transform[2, 4];
+    public List<NewTetrahedron> renderTetras = new List<NewTetrahedron>();
     public Vector3[] point = new Vector3[4];
 
-    public TetraRenderer(MeshFilter meshFilter_, MeshCollider meshCollider_)
+    public TetraRenderer(GameObject renderTarget)
     {
-        meshFilter = meshFilter_;
-        meshCollider = meshCollider_;
+        meshFilter = renderTarget.GetComponent<MeshFilter>();
+        meshCollider = renderTarget.GetComponent<MeshCollider>();
+        meshRenderer = renderTarget.GetComponent<MeshRenderer>();
+    }
+
+    public void pickColor()
+    {
+        Material newMat = new Material(Shader.Find("Standard"));
+        Color pickedColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1.0f);
+        meshRenderer.material = newMat;
+        meshRenderer.material.color = pickedColor;
     }
 
     public Vector3[] calcVertices()
@@ -36,9 +48,30 @@ public class TetraRenderer
         return output;
     }
 
-    public int[] calcTriangles()
+    //public Vector3[] calcVertices(int tetraCount)
+    //{
+    //    Vector3[] output = new Vector3[tetraCount * 12];
+    //    int[] pointArray = new int[12] { 0, 1, 2, 0, 2, 3, 2, 1, 3, 0, 3, 1 };
+
+    //    for (int i = 0; i < tetraCount; i++)
+    //    {
+    //        Vector3[] tempVertices = new Vector3[4];
+    //        for (int l = 0; l < 4; l++) 
+    //        {
+    //             tempVertices[l] = renderTetras[i].vertices[l].pos;
+    //        }
+
+    //        for (int j = 0; j < 12; j++)
+    //        {
+    //            output[j + (i * 12)] = tempVertices[pointArray[j]];
+    //        }
+    //    }
+    //    return output;
+    //}
+
+    public int[] calcTriangles(int tetraCount)
     {
-        int[] output = new int[transforms.Length*3];
+        int[] output = new int[tetraCount * 12];
 
         for (int i = 0; i < output.Length; i++)
         {
@@ -48,9 +81,9 @@ public class TetraRenderer
         return output;
     }
 
-    public Vector2[] calcUvs()
+    public Vector2[] calcUvs(int tetraCount)
     {
-        Vector2[] output = new Vector2[transforms.Length*3];
+        Vector2[] output = new Vector2[tetraCount * 12];
 
         Vector2 uv0 = new Vector2(0, 0);
         Vector2 uv1 = new Vector2(1, 0);
@@ -64,11 +97,6 @@ public class TetraRenderer
         }
 
         return output;
-    }
-
-    public void tetrahedrons(Transform[,] transforms_)
-    {
-        transforms = transforms_;
     }
 
     public void loop()
@@ -88,11 +116,11 @@ public class TetraRenderer
 
         mesh.Clear();
 
-        mesh.vertices = calcVertices();
+        mesh.vertices = calcVertices(); //2
 
-        mesh.triangles = calcTriangles();
+        mesh.triangles = calcTriangles(2);
 
-        mesh.uv = calcUvs();
+        mesh.uv = calcUvs(2);
 
         mesh.triangles = mesh.triangles.Reverse().ToArray();
 

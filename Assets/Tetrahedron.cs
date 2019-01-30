@@ -7,6 +7,7 @@ public class Tetrahedron
     public Vector3 B { get; set; }
     public Vector3 C { get; set; }
     public Vector3 D { get; set; }
+
     public Tetrahedron()
     {
         A = new Vector3(0.0f, 0.0f, 0.0f);

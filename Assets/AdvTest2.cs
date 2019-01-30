@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class AdvTest2 : MonoBehaviour
 {
-    private TetraMath tm = new TetraMath();
     public Transform point0;
     public Transform point1;
     public Transform point2;
@@ -33,7 +32,7 @@ public class AdvTest2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        posTarget = tm.trilaterate(point0.localPosition, point1.localPosition, point2.localPosition, sideLengths[0], sideLengths[1], sideLengths[2]);
+        posTarget = TetraUtil.trilaterate(point0.localPosition, point1.localPosition, point2.localPosition, sideLengths[0], sideLengths[1], sideLengths[2]);
         
         transform.localPosition = posTarget;
     }

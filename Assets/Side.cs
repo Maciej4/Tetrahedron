@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Side : MonoBehaviour
+public class Side
 {
-    public HashSet<Vertex> vertices;
+    public HashSet<Vertex> vertices = new HashSet<Vertex>();
 
     public float length = 2.0f;
 

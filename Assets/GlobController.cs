@@ -12,14 +12,13 @@ using System;
 [ExecuteInEditMode]
 public class GlobController : MonoBehaviour
 {
-    MeshFilter meshFilter = null;
-    MeshCollider meshCollider = null;
-    private TetraMath tm = new TetraMath();
     private TetraRenderer tr;
 
     public HashSet<Vertex> vertices = new HashSet<Vertex>();
 
     public HashSet<Side> sides = new HashSet<Side>();
+
+    public HashSet<NewTetrahedron> tetrahedrons = new HashSet<NewTetrahedron>();
 
     public Vector3[] point = new Vector3[4] {
         new Vector3(0, 0, 0),
@@ -34,8 +33,6 @@ public class GlobController : MonoBehaviour
 
     private float[] sideLength = { 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f };
 
-    public Transform[,] tetrahedrons = new Transform[1,4];
-
     public Transform[] vertexTransforms;
 
     private float a = 0.9f;
@@ -43,10 +40,9 @@ public class GlobController : MonoBehaviour
     private float min = 0.0f;
     private float max = 1.0f;
     public bool colorPicked = false;
+    public bool runTest = true;
     private Color pickedColor;
     public Vector3 centerMass;
-    public bool wantsToConnect = false;
-    public TetraController connectTarget = null;
     public Quaternion rotation;
 
     // Use this for initialization
@@ -54,9 +50,8 @@ public class GlobController : MonoBehaviour
     void Start()
     {
         colorPicked = false;
-        MeshFilter meshFilter_ = GetComponent<MeshFilter>();
-        MeshCollider meshCollider_ = GetComponent<MeshCollider>();
-        tr = new TetraRenderer(meshFilter_, meshCollider_);
+        runTest = true;
+        tr = new TetraRenderer(this.gameObject);
     }
 
     public Quaternion findRotation(Vector3 v3Pos1, Vector3 v3Pos2) 
@@ -92,7 +87,7 @@ public class GlobController : MonoBehaviour
         for (int i = 0; i < vertexTransforms.Length - 1; i++)
         {
             vertexTransforms[i] = vertexTransforms[i + 1];
-            vertices.Add(new Vertex(vertexTransforms[i + 1]));
+            //vertices.Add(new Vertex(vertexTransforms[i + 1]));
         }
         Array.Resize(ref vertexTransforms, vertexTransforms.Length - 1);
     }
@@ -108,9 +103,9 @@ public class GlobController : MonoBehaviour
             averagedY += vertexTransforms[i].position.y;
             averagedZ += vertexTransforms[i].position.z;
         }
-        averagedX /= 4.0f;
-        averagedY /= 4.0f;
-        averagedZ /= 4.0f;
+        averagedX /= (float)vertexTransforms.Count();
+        averagedY /= (float)vertexTransforms.Count();
+        averagedZ /= (float)vertexTransforms.Count();
         return new Vector3(averagedX, averagedY, averagedZ);
     }
 
@@ -122,7 +117,7 @@ public class GlobController : MonoBehaviour
             sideLength[i] = Mathf.SmoothDamp(sideLength[i], sideSet[i] + b, ref sideVel[i], 1.0f);
         }
 
-        Tetrahedron t = tm.edge_input(
+        Tetrahedron t = TetraUtil.originVertices(
             sideLength[0] * a + b, sideLength[1] * a + b,
             sideLength[2] * a + b, sideLength[3] * a + b,
             sideLength[4] * a + b, sideLength[5] * a + b
@@ -147,24 +142,55 @@ public class GlobController : MonoBehaviour
 
         rotation.z = Quaternion.FromToRotation(Vector3.right, new Vector3(0, point[2].y, 0)).z;
 
-        Debug.Log(vertices.Count);
-
         calcPoints();
 
         if (!colorPicked)
         {
-            Material newMat = new Material(Shader.Find("Standard"));
-            pickedColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1.0f);
-            this.gameObject.GetComponent<MeshRenderer>().material = newMat;
-            this.gameObject.GetComponent<MeshRenderer>().material.color = pickedColor;
             colorPicked = true;
+            tr.pickColor();
+        }
+
+        if (runTest)
+        {
+            runTest = false;
+            vertices.Clear();
+            tr.renderTetras.Clear();
+
+            Vertex[] tempVertices = new Vertex[vertices.Count];
+            Debug.Log("---------Vertices---------");
+
+            for (int i = 0; i < 5; i++)
+            {
+                Vertex tempVertex = new Vertex(i); 
+                tempVertex.pos = vertexTransforms[i].localPosition;
+                Debug.Log("Vertex: " + tempVertex + "; ID: " + tempVertex.ID + "; Pos: " + tempVertex.pos);
+                tempVertices[i] = tempVertex;
+                vertices.Add(tempVertex);
+            }
+
+            TetraUtil.isNull(tempVertices);
+
+            tetrahedrons.Add(new NewTetrahedron(tempVertices[0], tempVertices[1], tempVertices[2], tempVertices[3], true));
+            tetrahedrons.Add(new NewTetrahedron(tempVertices[2], tempVertices[1], tempVertices[0], tempVertices[4]));
+
+            Debug.Log(tetrahedrons.Count + " tetrahedron(s)");
+
+            foreach(NewTetrahedron tetra in tetrahedrons)
+            {
+                tr.renderTetras.Add(tetra);
+            }
+
+            Debug.Log(tr.renderTetras.Count + " render tetrahedron(s)");
         }
 
         if (tr == null)
         {
-            MeshFilter meshFilter_ = GetComponent<MeshFilter>();
-            MeshCollider meshCollider_ = GetComponent<MeshCollider>();
-            tr = new TetraRenderer(meshFilter_, meshCollider_);
+            tr = new TetraRenderer(this.gameObject);
+        }
+
+        foreach(NewTetrahedron tetra in tetrahedrons)
+        {
+            tetra.loop();
         }
 
         tr.transforms[0, 0] = GetComponentsInChildren<Transform>()[1];
@@ -178,6 +204,5 @@ public class GlobController : MonoBehaviour
         tr.transforms[1, 3] = GetComponentsInChildren<Transform>()[5];
 
         tr.loop();
-        
     }
 }
