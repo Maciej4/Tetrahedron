@@ -27,47 +27,47 @@ public class TetraRenderer
         meshRenderer.material.color = pickedColor;
     }
 
-    public Vector3[] calcVertices()
-    {
-        Vector3[] output = new Vector3[transforms.Length*3];
-        int[] pointArray = new int[12] {0,1,2,0,2,3,2,1,3,0,3,1 };
-
-        for (int i = 0; i < transforms.Length / 4; i++)
-        {
-            Vector3[] tempVertices = new Vector3[4] {
-                transforms[i, 0].localPosition, transforms[i, 1].localPosition,
-                transforms[i, 2].localPosition, transforms[i, 3].localPosition
-            };
-
-            for (int j = 0; j < 12; j++)
-            {
-                output[j + (i * 12)] = tempVertices[pointArray[j]];
-            }
-        }
-
-        return output;
-    }
-
-    //public Vector3[] calcVertices(int tetraCount)
+    //public Vector3[] calcVertices()
     //{
-    //    Vector3[] output = new Vector3[tetraCount * 12];
-    //    int[] pointArray = new int[12] { 0, 1, 2, 0, 2, 3, 2, 1, 3, 0, 3, 1 };
+    //    Vector3[] output = new Vector3[transforms.Length*3];
+    //    int[] pointArray = new int[12] {0,1,2,0,2,3,2,1,3,0,3,1 };
 
-    //    for (int i = 0; i < tetraCount; i++)
+    //    for (int i = 0; i < transforms.Length / 4; i++)
     //    {
-    //        Vector3[] tempVertices = new Vector3[4];
-    //        for (int l = 0; l < 4; l++) 
-    //        {
-    //             tempVertices[l] = renderTetras[i].vertices[l].pos;
-    //        }
+    //        Vector3[] tempVertices = new Vector3[4] {
+    //            transforms[i, 0].localPosition, transforms[i, 1].localPosition,
+    //            transforms[i, 2].localPosition, transforms[i, 3].localPosition
+    //        };
 
     //        for (int j = 0; j < 12; j++)
     //        {
     //            output[j + (i * 12)] = tempVertices[pointArray[j]];
     //        }
     //    }
+
     //    return output;
     //}
+
+    public Vector3[] calcVertices(int tetraCount)
+    {
+        Vector3[] output = new Vector3[tetraCount * 12];
+        int[] pointArray = new int[12] { 0, 1, 2, 0, 2, 3, 2, 1, 3, 0, 3, 1 };
+
+        for (int i = 0; i < tetraCount; i++)
+        {
+            Vector3[] tempVertices = new Vector3[4];
+            for (int l = 0; l < 4; l++) 
+            {
+                 tempVertices[l] = renderTetras[i].vertices[l].pos;
+            }
+
+            for (int j = 0; j < 12; j++)
+            {
+                output[j + (i * 12)] = tempVertices[pointArray[j]];
+            }
+        }
+        return output;
+    }
 
     public int[] calcTriangles(int tetraCount)
     {
@@ -116,11 +116,13 @@ public class TetraRenderer
 
         mesh.Clear();
 
-        mesh.vertices = calcVertices(); //2
+        int tetraCount = renderTetras.Count();
 
-        mesh.triangles = calcTriangles(2);
+        mesh.vertices = calcVertices(tetraCount);
 
-        mesh.uv = calcUvs(2);
+        mesh.triangles = calcTriangles(tetraCount);
+
+        mesh.uv = calcUvs(tetraCount);
 
         mesh.triangles = mesh.triangles.Reverse().ToArray();
 

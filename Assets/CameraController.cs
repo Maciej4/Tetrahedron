@@ -11,6 +11,7 @@ public class CameraController : MonoBehaviour {
     public int zoomSpeed = 3;
     public int zoomMax = 100;
     public int zoomMin = 5;
+    public float trackingDistance = 5;
     public bool trackingActive = false;
     public List<Transform> selectedTetrahedrons;
     public Transform goalPoint;
@@ -50,6 +51,8 @@ public class CameraController : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Space) && !(selectedTetrahedrons == null))
         {
             trackingActive = !trackingActive;
+
+            trackingDistance = transform.position.y;
         }
 
         if (trackingActive)
@@ -83,10 +86,11 @@ public class CameraController : MonoBehaviour {
 
             if (trackingActive)
             {
-                Ray ray = Camera.main.ScreenPointToRay(new Vector3(theScreenWidth/2.0f, theScreenHeight/2.0f, Input.mousePosition.z));
-                zoomDelta = ray.direction.normalized * zoomAmount;
-                newPosition.y += zoomDelta.y;
-                newPosition.z = optimalZ - newPosition.y;
+
+                //Ray ray = Camera.main.ScreenPointToRay(new Vector3(theScreenWidth/2.0f, theScreenHeight/2.0f, Input.mousePosition.z));
+                //zoomDelta = ray.direction.normalized * zoomAmount;
+                //newPosition.y += zoomDelta.y;
+                //newPosition.z = optimalZ - newPosition.y;
             } else {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 zoomDelta = ray.direction.normalized * zoomAmount;
@@ -97,6 +101,14 @@ public class CameraController : MonoBehaviour {
         else
         {
             newPosition.y = zoomMin;
+        }
+
+        if (trackingActive)
+        {
+            trackingDistance += zoomAmount / 2;
+            trackingDistance = Mathf.Clamp(Mathf.Clamp(trackingDistance, 3, 50), transform.position.y - 3, transform.position.y + 3);
+            newPosition.y = trackingDistance;
+            newPosition.z = optimalZ - trackingDistance;
         }
 
         //Unit Selection

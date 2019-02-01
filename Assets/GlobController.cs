@@ -18,7 +18,7 @@ public class GlobController : MonoBehaviour
 
     public HashSet<Side> sides = new HashSet<Side>();
 
-    public HashSet<NewTetrahedron> tetrahedrons = new HashSet<NewTetrahedron>();
+    public List<NewTetrahedron> tetrahedrons = new List<NewTetrahedron>();
 
     public Vector3[] point = new Vector3[4] {
         new Vector3(0, 0, 0),
@@ -27,7 +27,9 @@ public class GlobController : MonoBehaviour
         new Vector3(0.5f, Mathf.Sqrt(0.75f), Mathf.Sqrt(0.75f) / 3)
     };
 
-    public float[] sideSet = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
+    public List<float> sideSetList = new List<float>();
+
+    //public float[] sideSet = { 2.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f };
 
     private float[] sideVel = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
 
@@ -37,8 +39,8 @@ public class GlobController : MonoBehaviour
 
     private float a = 0.9f;
     private float b = 1.0f;
-    private float min = 0.0f;
-    private float max = 1.0f;
+    //private float min = 0.0f;
+    //private float max = 1.0f;
     public bool colorPicked = false;
     public bool runTest = true;
     private Color pickedColor;
@@ -111,11 +113,11 @@ public class GlobController : MonoBehaviour
 
     public void calcPoints()
     {
-        for(int i = 0; i < 5; i++)
-        {
-            sideSet[i] = Mathf.Clamp(sideSet[i], min, max);
-            sideLength[i] = Mathf.SmoothDamp(sideLength[i], sideSet[i] + b, ref sideVel[i], 1.0f);
-        }
+        //for(int i = 0; i < 5; i++)
+        //{
+        //    sideSet[i] = Mathf.Clamp(sideSet[i], min, max);
+        //    sideLength[i] = Mathf.SmoothDamp(sideLength[i], sideSet[i] + b, ref sideVel[i], 1.0f);
+        //}
 
         Tetrahedron t = TetraUtil.originVertices(
             sideLength[0] * a + b, sideLength[1] * a + b,
@@ -156,7 +158,7 @@ public class GlobController : MonoBehaviour
             vertices.Clear();
             tr.renderTetras.Clear();
 
-            Vertex[] tempVertices = new Vertex[vertices.Count];
+            Vertex[] tempVertices = new Vertex[5];
             Debug.Log("---------Vertices---------");
 
             for (int i = 0; i < 5; i++)
@@ -182,6 +184,24 @@ public class GlobController : MonoBehaviour
 
             Debug.Log(tr.renderTetras.Count + " render tetrahedron(s)");
         }
+
+        int p = 0;
+        foreach (NewTetrahedron tetrahedron in tetrahedrons)
+        {
+            foreach (Side side in tetrahedron.sides)
+            {
+                if(sideSetList.Count < p + 1)
+                {
+                    sideSetList.Add(2.0f);
+                }
+
+                side.length = sideSetList[p];
+                   
+                p++;
+            }
+        }
+
+        Debug.Log(p);
 
         if (tr == null)
         {
