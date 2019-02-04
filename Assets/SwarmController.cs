@@ -23,7 +23,7 @@ public class SwarmController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        prefab = GameObject.FindGameObjectWithTag("MainTetrahedron").transform;
+        //prefab = GameObject.FindGameObjectWithTag("MainTetrahedron").transform;
         walkScripts = this.gameObject.GetComponentsInChildren<WalkController>();
         if (startMove) {
             startMove = false;
@@ -51,12 +51,12 @@ public class SwarmController : MonoBehaviour {
         if (makeQueued) {
             for (int i = 0; i < tetrobotsToMake; i++) {
                 float x = Random.value * 50.0f - 25.0f;
-                float y = 5.0f;
+                //float y = 5.0f;
                 float z = Random.value * 50.0f - 25.0f;
-                Transform go = Instantiate(prefab, new Vector3(x, y, z), Quaternion.identity);
-                go.transform.parent = transform;
-                go.tag = "Untagged";
-                go.name = "Tetrahedron "+ (i+tetrahedronCount).ToString("000");
+                //Transform go = Instantiate(prefab, new Vector3(x, y, z), Quaternion.identity);
+                //go.transform.parent = transform;
+                //go.tag = "Untagged";
+                //go.name = "Tetrahedron "+ (i+tetrahedronCount).ToString("000");
             }
             tetrobotsToMake = 0;
             makeQueued = false;
@@ -71,7 +71,7 @@ public class SwarmController : MonoBehaviour {
             armDestroyAll = false;
             foreach (Transform child in transform)
             {
-                GameObject.Destroy(child.gameObject);
+                //GameObject.Destroy(child.gameObject);
             }
         }
 	}

@@ -61,11 +61,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\AdvTest.cs" />
-    <Compile Include="Assets\AdvTest2.cs" />
     <Compile Include="Assets\CameraController.cs" />
-    <Compile Include="Assets\CylinderController.cs" />
-    <Compile Include="Assets\DockController.cs" />
     <Compile Include="Assets\GlobController.cs" />
     <Compile Include="Assets\NewTetrahedron.cs" />
     <Compile Include="Assets\Side.cs" />

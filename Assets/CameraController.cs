@@ -84,14 +84,8 @@ public class CameraController : MonoBehaviour {
         {
             Vector3 zoomDelta;
 
-            if (trackingActive)
+            if (!trackingActive)
             {
-
-                //Ray ray = Camera.main.ScreenPointToRay(new Vector3(theScreenWidth/2.0f, theScreenHeight/2.0f, Input.mousePosition.z));
-                //zoomDelta = ray.direction.normalized * zoomAmount;
-                //newPosition.y += zoomDelta.y;
-                //newPosition.z = optimalZ - newPosition.y;
-            } else {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 zoomDelta = ray.direction.normalized * zoomAmount;
                 newPosition += zoomDelta;
@@ -105,7 +99,7 @@ public class CameraController : MonoBehaviour {
 
         if (trackingActive)
         {
-            trackingDistance += zoomAmount / 2;
+            trackingDistance -= zoomAmount / 2;
             trackingDistance = Mathf.Clamp(Mathf.Clamp(trackingDistance, 3, 50), transform.position.y - 3, transform.position.y + 3);
             newPosition.y = trackingDistance;
             newPosition.z = optimalZ - trackingDistance;

@@ -1,11 +1,12 @@
 ﻿<Properties StartupConfiguration="{4D2FFCD9-9BB7-CF16-2FE8-D68C3BFD5C0C}|">
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/CameraController.cs">
     <Files>
-      <File FileName="Assets/GlobController.cs" Line="227" Column="6" />
-      <File FileName="Assets/TetraRenderer.cs" Line="125" Column="37" />
+      <File FileName="Assets/GlobController.cs" Line="176" Column="10" />
+      <File FileName="Assets/TetraRenderer.cs" Line="90" Column="9" />
       <File FileName="Assets/NewTetrahedron.cs" Line="47" Column="15" />
       <File FileName="Assets/TetraUtil.cs" Line="52" Column="10" />
-      <File FileName="Assets/CameraController.cs" Line="105" Column="9" />
+      <File FileName="Assets/SwarmController.cs" Line="74" Column="19" />
+      <File FileName="Assets/CameraController.cs" Line="83" Column="62" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

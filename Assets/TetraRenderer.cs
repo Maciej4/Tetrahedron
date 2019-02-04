@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class TetraRenderer
 {
+    //Variable and object declarations
     public MeshFilter meshFilter;
     public MeshCollider meshCollider;
     public MeshRenderer meshRenderer;
-    public Transform[,] transforms = new Transform[2, 4];
     public List<NewTetrahedron> renderTetras = new List<NewTetrahedron>();
-    public Vector3[] point = new Vector3[4];
 
+    //Class initializer, gets mesh related objects from globController
     public TetraRenderer(GameObject renderTarget)
     {
         meshFilter = renderTarget.GetComponent<MeshFilter>();
@@ -19,6 +19,7 @@ public class TetraRenderer
         meshRenderer = renderTarget.GetComponent<MeshRenderer>();
     }
 
+    //Picks a random color for the glob
     public void pickColor()
     {
         Material newMat = new Material(Shader.Find("Standard"));
@@ -27,27 +28,7 @@ public class TetraRenderer
         meshRenderer.material.color = pickedColor;
     }
 
-    //public Vector3[] calcVertices()
-    //{
-    //    Vector3[] output = new Vector3[transforms.Length*3];
-    //    int[] pointArray = new int[12] {0,1,2,0,2,3,2,1,3,0,3,1 };
-
-    //    for (int i = 0; i < transforms.Length / 4; i++)
-    //    {
-    //        Vector3[] tempVertices = new Vector3[4] {
-    //            transforms[i, 0].localPosition, transforms[i, 1].localPosition,
-    //            transforms[i, 2].localPosition, transforms[i, 3].localPosition
-    //        };
-
-    //        for (int j = 0; j < 12; j++)
-    //        {
-    //            output[j + (i * 12)] = tempVertices[pointArray[j]];
-    //        }
-    //    }
-
-    //    return output;
-    //}
-
+    //Arranges the local coordinates of the tetrahedrons into order for rendering
     public Vector3[] calcVertices(int tetraCount)
     {
         Vector3[] output = new Vector3[tetraCount * 12];
@@ -69,6 +50,7 @@ public class TetraRenderer
         return output;
     }
 
+    //Makes numbered list for rendering of triangles
     public int[] calcTriangles(int tetraCount)
     {
         int[] output = new int[tetraCount * 12];
@@ -81,6 +63,7 @@ public class TetraRenderer
         return output;
     }
 
+    //Makes list of vector2s for shading of tetrahedrons
     public Vector2[] calcUvs(int tetraCount)
     {
         Vector2[] output = new Vector2[tetraCount * 12];
@@ -99,21 +82,19 @@ public class TetraRenderer
         return output;
     }
 
+    //Loop, called by globController
     public void loop()
     {
-        if (meshFilter == null)
-        {
-            Debug.LogError("MeshFilter not found!");
-            return;
-        }
-
+        //Sets up mesh on first run
         Mesh mesh = meshFilter.sharedMesh;
+
         if (mesh == null)
         {
             meshFilter.mesh = new Mesh();
             mesh = meshFilter.sharedMesh;
         }
 
+        //Clears the mesh and draws the updated mesh
         mesh.Clear();
 
         int tetraCount = renderTetras.Count();

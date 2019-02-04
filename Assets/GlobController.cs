@@ -12,180 +12,142 @@ using System;
 [ExecuteInEditMode]
 public class GlobController : MonoBehaviour
 {
+    //Variable and object declarations
     private TetraRenderer tr;
-
     public HashSet<Vertex> vertices = new HashSet<Vertex>();
-
     public HashSet<Side> sides = new HashSet<Side>();
-
     public List<NewTetrahedron> tetrahedrons = new List<NewTetrahedron>();
-
-    public Vector3[] point = new Vector3[4] {
-        new Vector3(0, 0, 0),
-        new Vector3(1, 0, 0),
-        new Vector3(0.5f, 0, Mathf.Sqrt(0.75f)),
-        new Vector3(0.5f, Mathf.Sqrt(0.75f), Mathf.Sqrt(0.75f) / 3)
-    };
-
     public List<float> sideSetList = new List<float>();
+    public int[,] newSet = new int[3,4];
 
-    //public float[] sideSet = { 2.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f, 2.0f };
-
-    private float[] sideVel = { 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f };
-
-    private float[] sideLength = { 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f };
-
-    public Transform[] vertexTransforms;
-
-    private float a = 0.9f;
-    private float b = 1.0f;
-    //private float min = 0.0f;
-    //private float max = 1.0f;
     public bool colorPicked = false;
-    public bool runTest = true;
-    private Color pickedColor;
+    public bool runSetup = true;
     public Vector3 centerMass;
-    public Quaternion rotation;
 
-    // Use this for initialization
-
+    //Runs once at start of program
     void Start()
     {
         colorPicked = false;
-        runTest = true;
+        runSetup = true;
         tr = new TetraRenderer(this.gameObject);
+
+        newSet[0, 0] = 0;
+        newSet[0, 1] = 1;
+        newSet[0, 2] = 2;
+        newSet[0, 3] = 3;
+
+        newSet[1, 0] = 2;
+        newSet[1, 1] = 1;
+        newSet[1, 2] = 0;
+        newSet[1, 3] = 4;
+
+        newSet[2, 0] = 1;
+        newSet[2, 1] = 2;
+        newSet[2, 2] = 3;
+        newSet[2, 3] = 5;
     }
 
-    public Quaternion findRotation(Vector3 v3Pos1, Vector3 v3Pos2) 
-    {
-        return Quaternion.FromToRotation(point[2], v3Pos2 - v3Pos1);
-    }
-
-    public void makeVertex()
-    {
-        findVertices();
-
-        if (vertexTransforms.Length == 0)
-        {
-            GameObject go = new GameObject("Vertex 000");
-            go.transform.parent = this.transform;
-            Array.Resize(ref vertexTransforms, vertexTransforms.Length + 1);
-            vertexTransforms[vertexTransforms.Length] = go.transform;
-        }
-        else
-        {
-            GameObject go = Instantiate(vertexTransforms[0]).gameObject;
-            go.transform.parent = this.transform;
-            go.name = "Vertex " + vertexTransforms.Length.ToString("000");
-            Array.Resize(ref vertexTransforms, vertexTransforms.Length + 1);
-            vertexTransforms[vertexTransforms.Length] = go.transform;
-        }
-    }
-
-    public void findVertices()
-    {
-        vertexTransforms = this.gameObject.GetComponentsInChildren<Transform>();
-        vertexTransforms[0] = null;
-        for (int i = 0; i < vertexTransforms.Length - 1; i++)
-        {
-            vertexTransforms[i] = vertexTransforms[i + 1];
-            //vertices.Add(new Vertex(vertexTransforms[i + 1]));
-        }
-        Array.Resize(ref vertexTransforms, vertexTransforms.Length - 1);
-    }
-
+    //Calculates center of mass of glob
     public Vector3 calcCOM()
     {
         float averagedX = 0.0f;
         float averagedY = 0.0f;
         float averagedZ = 0.0f;
-        for (int i = 0; i < vertexTransforms.Length; i++)
+        int vertexCount = 0;
+        foreach (Vertex vertex in vertices)
         {
-            averagedX += vertexTransforms[i].position.x;
-            averagedY += vertexTransforms[i].position.y;
-            averagedZ += vertexTransforms[i].position.z;
+            averagedX += vertex.pos.x;
+            averagedY += vertex.pos.y;
+            averagedZ += vertex.pos.z;
+            vertexCount++;
         }
-        averagedX /= (float)vertexTransforms.Count();
-        averagedY /= (float)vertexTransforms.Count();
-        averagedZ /= (float)vertexTransforms.Count();
-        return new Vector3(averagedX, averagedY, averagedZ);
+        averagedX /= (float)vertexCount;
+        averagedY /= (float)vertexCount;
+        averagedZ /= (float)vertexCount;
+        Vector3 localCom = new Vector3(averagedX, averagedY, averagedZ);
+
+        Vector3 worldCOM = transform.TransformPoint(localCom);
+        return worldCOM;
     }
 
-    public void calcPoints()
+    //Run to update list of tetrahedrons
+    public void setupTetras() 
     {
-        //for(int i = 0; i < 5; i++)
-        //{
-        //    sideSet[i] = Mathf.Clamp(sideSet[i], min, max);
-        //    sideLength[i] = Mathf.SmoothDamp(sideLength[i], sideSet[i] + b, ref sideVel[i], 1.0f);
-        //}
+        Debug.Log("---------Vertices---------");
 
-        Tetrahedron t = TetraUtil.originVertices(
-            sideLength[0] * a + b, sideLength[1] * a + b,
-            sideLength[2] * a + b, sideLength[3] * a + b,
-            sideLength[4] * a + b, sideLength[5] * a + b
-        );
+        vertices.Clear();
+        tetrahedrons.Clear();
+        tr.renderTetras.Clear();
 
-        point[0] = t.A;
-        point[1] = t.B;
-        point[2] = t.C;
-        point[3] = t.D;
+        int maxVertexCount = 0; 
 
-        vertexTransforms[0].localPosition = point[0];
-        vertexTransforms[1].localPosition = point[1];
-        vertexTransforms[2].localPosition = point[2];
-        vertexTransforms[3].localPosition = point[3];
+        for(int o = 0; o < newSet.Length / 4; o++)
+        { 
+            for(int l = 0; l < 4; l++)
+            {   
+                if(newSet[o, l] > maxVertexCount)
+                {
+                    maxVertexCount = newSet[o, l];
+                }
+            }
+        }
+
+        maxVertexCount++;
+
+        Debug.Log("max vertex count: " + maxVertexCount);
+
+        Vertex[] tempVertices = new Vertex[maxVertexCount];
+
+        for (int i = 0; i < maxVertexCount; i++)
+        {
+            Vertex tempVertex = new Vertex(i);
+            Debug.Log("Vertex: " + tempVertex + "; ID: " + tempVertex.ID + "; Pos: " + tempVertex.pos);
+            tempVertices[i] = tempVertex;
+            vertices.Add(tempVertex);
+        }
+
+        TetraUtil.isNull(tempVertices);
+
+        tetrahedrons.Add(new NewTetrahedron(tempVertices[0], tempVertices[1], tempVertices[2], tempVertices[3], true));
+
+        for (int j = 1; j < newSet.Length/4; j++)
+        {
+            tetrahedrons.Add(new NewTetrahedron(tempVertices[newSet[j, 0]], tempVertices[newSet[j, 1]], tempVertices[newSet[j, 2]], tempVertices[newSet[j, 3]]));
+        }
+
+        Debug.Log(tetrahedrons.Count + " tetrahedron(s)");
+
+        foreach (NewTetrahedron tetra in tetrahedrons)
+        {
+            tr.renderTetras.Add(tetra);
+        }
+
+        Debug.Log(tr.renderTetras.Count + " render tetrahedron(s)");
     }
 
+    //Physics update, runs repeatedly
     void FixedUpdate()
     {
-        findVertices();
-
+        //Sets center of mass
         centerMass = calcCOM();
 
-        rotation.z = Quaternion.FromToRotation(Vector3.right, new Vector3(0, point[2].y, 0)).z;
-
-        calcPoints();
-
+        //Tells tetraRenderer to pick color
         if (!colorPicked)
         {
             colorPicked = true;
             tr.pickColor();
         }
 
-        if (runTest)
+        //Runs setup of tetrahedrons
+        if (runSetup)
         {
-            runTest = false;
-            vertices.Clear();
-            tr.renderTetras.Clear();
-
-            Vertex[] tempVertices = new Vertex[5];
-            Debug.Log("---------Vertices---------");
-
-            for (int i = 0; i < 5; i++)
-            {
-                Vertex tempVertex = new Vertex(i); 
-                tempVertex.pos = vertexTransforms[i].localPosition;
-                Debug.Log("Vertex: " + tempVertex + "; ID: " + tempVertex.ID + "; Pos: " + tempVertex.pos);
-                tempVertices[i] = tempVertex;
-                vertices.Add(tempVertex);
-            }
-
-            TetraUtil.isNull(tempVertices);
-
-            tetrahedrons.Add(new NewTetrahedron(tempVertices[0], tempVertices[1], tempVertices[2], tempVertices[3], true));
-            tetrahedrons.Add(new NewTetrahedron(tempVertices[2], tempVertices[1], tempVertices[0], tempVertices[4]));
-
-            Debug.Log(tetrahedrons.Count + " tetrahedron(s)");
-
-            foreach(NewTetrahedron tetra in tetrahedrons)
-            {
-                tr.renderTetras.Add(tetra);
-            }
-
-            Debug.Log(tr.renderTetras.Count + " render tetrahedron(s)");
+            runSetup = false;
+            setupTetras();
         }
 
+        //Sets side lengths in tetrahedrons
         int p = 0;
+
         foreach (NewTetrahedron tetrahedron in tetrahedrons)
         {
             foreach (Side side in tetrahedron.sides)
@@ -201,28 +163,19 @@ public class GlobController : MonoBehaviour
             }
         }
 
-        Debug.Log(p);
-
-        if (tr == null)
-        {
-            tr = new TetraRenderer(this.gameObject);
-        }
-
+        //Runs loop of tetrahedrons
         foreach(NewTetrahedron tetra in tetrahedrons)
         {
             tetra.loop();
         }
 
-        tr.transforms[0, 0] = GetComponentsInChildren<Transform>()[1];
-        tr.transforms[0, 1] = GetComponentsInChildren<Transform>()[2];
-        tr.transforms[0, 2] = GetComponentsInChildren<Transform>()[3];
-        tr.transforms[0, 3] = GetComponentsInChildren<Transform>()[4];
+        //Catches if tetraRenderer does not exist
+        if (tr == null)
+        {
+            tr = new TetraRenderer(this.gameObject);
+        }
 
-        tr.transforms[1, 0] = GetComponentsInChildren<Transform>()[3];
-        tr.transforms[1, 1] = GetComponentsInChildren<Transform>()[2];
-        tr.transforms[1, 2] = GetComponentsInChildren<Transform>()[1];
-        tr.transforms[1, 3] = GetComponentsInChildren<Transform>()[5];
-
+        //Loops tetraRenderer
         tr.loop();
     }
 }
