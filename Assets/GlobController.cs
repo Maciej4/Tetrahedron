@@ -18,10 +18,13 @@ public class GlobController : MonoBehaviour
     public HashSet<Side> sides = new HashSet<Side>();
     public List<NewTetrahedron> tetrahedrons = new List<NewTetrahedron>();
     public List<float> sideSetList = new List<float>();
-    public int[,] newSet = new int[3,4];
+    public List<int[]> vertexList = new List<int[]>();
+    public int[] newTetraVtx = new int[3];
 
+    public bool addNewTetra = false;
     public bool colorPicked = false;
     public bool runSetup = true;
+    public bool internalView = false;
     public Vector3 centerMass;
 
     //Runs once at start of program
@@ -31,20 +34,10 @@ public class GlobController : MonoBehaviour
         runSetup = true;
         tr = new TetraRenderer(this.gameObject);
 
-        newSet[0, 0] = 0;
-        newSet[0, 1] = 1;
-        newSet[0, 2] = 2;
-        newSet[0, 3] = 3;
-
-        newSet[1, 0] = 2;
-        newSet[1, 1] = 1;
-        newSet[1, 2] = 0;
-        newSet[1, 3] = 4;
-
-        newSet[2, 0] = 1;
-        newSet[2, 1] = 2;
-        newSet[2, 2] = 3;
-        newSet[2, 3] = 5;
+        vertexList.Add(new int[4] { 0, 1, 2, 3 });
+        vertexList.Add(new int[4] { 2, 1, 0, 4 });
+        //vertexList.Add(new int[4] { 1, 2, 3, 5 });
+        newTetraVtx = new int[3] { 1, 2, 3 };
     }
 
     //Calculates center of mass of glob
@@ -70,6 +63,55 @@ public class GlobController : MonoBehaviour
         return worldCOM;
     }
 
+    public int closestVertex(Vector3 hitPos)
+    {
+        int closestID = 0;
+        float closestDist = 10.0f;
+
+        foreach (NewTetrahedron tetrahedron in tetrahedrons)
+        {
+            foreach (Vertex vertex in tetrahedron.vertices) {
+                Vector3 absolutePos = transform.TransformPoint(vertex.pos);
+                float distance = Vector3.Distance(absolutePos, hitPos);
+
+                if (distance < closestDist)
+                {
+                    closestID = vertex.ID;
+                    closestDist = distance;
+                }
+            }
+        }
+
+        return closestID;
+    }
+
+    public int maxVertex()
+    {
+        int maxVertexID = 0;
+
+        for (int o = 0; o < vertexList.Count; o++)
+        {
+            for (int l = 0; l < 4; l++)
+            {
+                if (vertexList[o][l] > maxVertexID)
+                {
+                    maxVertexID = vertexList[o][l];
+                }
+            }
+        }
+
+        maxVertexID++;
+
+        return maxVertexID;
+    }
+
+    public void addTetra(int a, int b, int c)
+    {
+        vertexList.Add(new int[4] { a, b, c, maxVertex() + 1 });
+
+        setupTetras();
+    }
+
     //Run to update list of tetrahedrons
     public void setupTetras() 
     {
@@ -79,20 +121,7 @@ public class GlobController : MonoBehaviour
         tetrahedrons.Clear();
         tr.renderTetras.Clear();
 
-        int maxVertexCount = 0; 
-
-        for(int o = 0; o < newSet.Length / 4; o++)
-        { 
-            for(int l = 0; l < 4; l++)
-            {   
-                if(newSet[o, l] > maxVertexCount)
-                {
-                    maxVertexCount = newSet[o, l];
-                }
-            }
-        }
-
-        maxVertexCount++;
+        int maxVertexCount = maxVertex();
 
         Debug.Log("max vertex count: " + maxVertexCount);
 
@@ -110,9 +139,14 @@ public class GlobController : MonoBehaviour
 
         tetrahedrons.Add(new NewTetrahedron(tempVertices[0], tempVertices[1], tempVertices[2], tempVertices[3], true));
 
-        for (int j = 1; j < newSet.Length/4; j++)
+        for (int j = 1; j < vertexList.Count; j++)
         {
-            tetrahedrons.Add(new NewTetrahedron(tempVertices[newSet[j, 0]], tempVertices[newSet[j, 1]], tempVertices[newSet[j, 2]], tempVertices[newSet[j, 3]]));
+            tetrahedrons.Add(new NewTetrahedron(
+                tempVertices[vertexList[j][0]], 
+                tempVertices[vertexList[j][1]], 
+                tempVertices[vertexList[j][2]], 
+                tempVertices[vertexList[j][3]])
+            );
         }
 
         Debug.Log(tetrahedrons.Count + " tetrahedron(s)");
@@ -135,7 +169,7 @@ public class GlobController : MonoBehaviour
         if (!colorPicked)
         {
             colorPicked = true;
-            tr.pickColor();
+            tr.pickRandomColor();
         }
 
         //Runs setup of tetrahedrons
@@ -143,6 +177,13 @@ public class GlobController : MonoBehaviour
         {
             runSetup = false;
             setupTetras();
+        }
+
+        //Runs adding of new tetrahedron
+        if (addNewTetra)
+        {
+            addNewTetra = false;
+            addTetra(newTetraVtx[0], newTetraVtx[1], newTetraVtx[2]);
         }
 
         //Sets side lengths in tetrahedrons

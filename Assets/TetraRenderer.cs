@@ -20,7 +20,7 @@ public class TetraRenderer
     }
 
     //Picks a random color for the glob
-    public void pickColor()
+    public void pickRandomColor()
     {
         Material newMat = new Material(Shader.Find("Standard"));
         Color pickedColor = new Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value, 1.0f);

@@ -10,12 +10,15 @@ public class CameraController : MonoBehaviour {
     private int theScreenHeight;
     public int zoomSpeed = 3;
     public int zoomMax = 100;
-    public int zoomMin = 5;
+    public int zoomMin = 3;
     public float trackingDistance = 5;
     public bool trackingActive = false;
     public List<Transform> selectedTetrahedrons;
     public Transform goalPoint;
     private float optimalZ;
+    public int globVertexId = -1;
+    public Vector3 hitPos;
+    public int inputID;
 
     void Start()
     {
@@ -130,6 +133,14 @@ public class CameraController : MonoBehaviour {
                             selectedTetrahedrons.Add(hit.transform);
                         }
                     }
+                    inputID = 0;
+                }
+                else if (!hit.transform.CompareTag("Terrain") && Input.GetKey(KeyCode.LeftControl) && hit.transform.name == "Glob" && inputID < 3)
+                {
+                    globVertexId = hit.transform.GetComponent<GlobController>().closestVertex(hit.point);
+                    hitPos = hit.point;
+                    hit.transform.GetComponent<GlobController>().newTetraVtx[inputID] = globVertexId;
+                    inputID++;
                 }
                 else
                 {
@@ -142,7 +153,9 @@ public class CameraController : MonoBehaviour {
                     {
                         selectedTetrahedrons.Clear();
                         trackingActive = false;
+                        globVertexId = -1;
                     }
+                    inputID = 0;
                 }
             }
         }
