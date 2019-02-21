@@ -48,15 +48,15 @@ public class NewTetrahedron
         }
         else
         {
-            Tetrahedron t = TetraUtil.originVertices(
+            Vector3[] outputVertices = TetraUtil.originVertices(
                  sides[0].length, sides[1].length, sides[2].length, 
                  sides[3].length, sides[4].length, sides[5].length
             );
 
-            vertices[0].pos = t.A;
-            vertices[1].pos = t.B;
-            vertices[2].pos = t.C;
-            vertices[3].pos = t.D;
+            vertices[0].pos = outputVertices[0];
+            vertices[1].pos = outputVertices[1];
+            vertices[2].pos = outputVertices[2];
+            vertices[3].pos = outputVertices[3];
         }
     }
 }

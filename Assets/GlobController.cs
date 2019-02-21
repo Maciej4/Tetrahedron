@@ -14,6 +14,7 @@ public class GlobController : MonoBehaviour
 {
     //Variable and object declarations
     private TetraRenderer tr;
+    public SimpleWalkController sw;
     public HashSet<Vertex> vertices = new HashSet<Vertex>();
     public HashSet<Side> sides = new HashSet<Side>();
     public List<NewTetrahedron> tetrahedrons = new List<NewTetrahedron>();
@@ -24,7 +25,6 @@ public class GlobController : MonoBehaviour
     public bool addNewTetra = false;
     public bool colorPicked = false;
     public bool runSetup = true;
-    public bool internalView = false;
     public Vector3 centerMass;
 
     //Runs once at start of program
@@ -33,11 +33,12 @@ public class GlobController : MonoBehaviour
         colorPicked = false;
         runSetup = true;
         tr = new TetraRenderer(this.gameObject);
+        sw = new SimpleWalkController(this.gameObject);
 
         vertexList.Add(new int[4] { 0, 1, 2, 3 });
-        vertexList.Add(new int[4] { 2, 1, 0, 4 });
+        //vertexList.Add(new int[4] { 2, 1, 0, 4 });
         //vertexList.Add(new int[4] { 1, 2, 3, 5 });
-        newTetraVtx = new int[3] { 1, 2, 3 };
+        newTetraVtx = new int[3] { 2, 1, 0 };
     }
 
     //Calculates center of mass of glob
@@ -198,7 +199,7 @@ public class GlobController : MonoBehaviour
                     sideSetList.Add(2.0f);
                 }
 
-                side.length = sideSetList[p];
+                side.length = Mathf.SmoothStep(side.length, sideSetList[p], 0.10f);
                    
                 p++;
             }
@@ -218,5 +219,7 @@ public class GlobController : MonoBehaviour
 
         //Loops tetraRenderer
         tr.loop();
+
+        sw.loop();
     }
 }

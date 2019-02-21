@@ -4,7 +4,7 @@ using UnityEngine;
 public static class TetraUtil
 {
 
-    public static Tetrahedron originVertices(float AsB_m, float AsC_m, float AsD_m, float BsC_m, float BsD_m, float CsD_m)
+    public static Vector3[] originVertices(float AsB_m, float AsC_m, float AsD_m, float BsC_m, float BsD_m, float CsD_m)
     {
         float AsB_m2 = AsB_m * AsB_m;
         float AsC_m2 = AsC_m * AsC_m;
@@ -18,12 +18,12 @@ public static class TetraUtil
         float sx = (AsB_m2 + AsD_m2 - BsD_m2) / (2.0f * AsB_m);
         float sy = (BsD_m2 - (sx - qx) * (sx - qx) - CsD_m2 + (sx - rx) * (sx - rx) + ry * ry) / (2 * ry);
         float sz = Mathf.Sqrt(AsD_m2 - sx * sx - sy * sy);
-        Tetrahedron t = new Tetrahedron();
-        t.A = new Vector3(0.0f, 0.0f, 0.0f);
-        t.B = new Vector3(qx, 0.0f, 0.0f);
-        t.C = new Vector3(rx, ry, 0.0f);
-        t.D = new Vector3(sx, sy, sz);
-        return t;
+        Vector3[] output = new Vector3[4];
+        output[0] = new Vector3(0.0f, 0.0f, 0.0f);
+        output[1] = new Vector3(qx, 0.0f, 0.0f);
+        output[2] = new Vector3(rx, ry, 0.0f);
+        output[3] = new Vector3(sx, sy, sz);
+        return output;
     }
 
     public static Vector3 trilaterate(Vector3 P1, Vector3 P2, Vector3 P3, float r1, float r2, float r3, bool inverse = false)

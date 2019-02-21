@@ -65,12 +65,7 @@ public class CameraController : MonoBehaviour {
 
             for (int i = 0; i < selectedTetrahedrons.Count; i++)
             {
-                if (selectedTetrahedrons[i].GetComponent<TetraController>() != null)
-                {
-                    totalAverageX += selectedTetrahedrons[i].GetComponent<TetraController>().centerMass.x;
-                    totalAverageZ += selectedTetrahedrons[i].GetComponent<TetraController>().centerMass.z;
-                }
-                else if (selectedTetrahedrons[i].GetComponent<GlobController>() != null)
+                if (selectedTetrahedrons[i].GetComponent<GlobController>() != null)
                 {
                     totalAverageX += selectedTetrahedrons[i].GetComponent<GlobController>().centerMass.x;
                     totalAverageZ += selectedTetrahedrons[i].GetComponent<GlobController>().centerMass.z;
@@ -161,42 +156,42 @@ public class CameraController : MonoBehaviour {
         }
 
         //Placment of waypoint
-        if (selectedTetrahedrons.Count > 0)
-        {
-            if (selectedTetrahedrons.Count == 1 && (selectedTetrahedrons[0].GetComponent<WalkController>() != null))
-            {
-                goalPoint.position = selectedTetrahedrons[0].GetComponent<WalkController>().goalPos;
-            }
-            else if (selectedTetrahedrons[0].GetComponent<WalkController>() != null)
-            {
-                bool allGoalsSame = true;
-                Vector3 refercnceGoal = selectedTetrahedrons[0].GetComponent<WalkController>().goalPos;
+        //if (selectedTetrahedrons.Count > 0)
+        //{
+        //    if (selectedTetrahedrons.Count == 1 && (selectedTetrahedrons[0].GetComponent<GlobController>().sw != null))
+        //    {
+        //        goalPoint.position = selectedTetrahedrons[0].GetComponent<GlobController>().sw.goalPos;
+        //    }
+        //    else if (selectedTetrahedrons[0].GetComponent<GlobController>().sw != null)
+        //    {
+        //        bool allGoalsSame = true;
+        //        Vector3 refercnceGoal = selectedTetrahedrons[0].GetComponent<GlobController>().sw.goalPos;
 
-                for (int i = 1; i < selectedTetrahedrons.Count; i++)
-                {
-                    if (selectedTetrahedrons[0].GetComponent<WalkController>() != null)
-                    {
-                        if (!(selectedTetrahedrons[i].GetComponent<WalkController>().goalPos == refercnceGoal))
-                        {
-                            allGoalsSame = false;
-                        }
-                    }
-                }
+        //        for (int i = 1; i < selectedTetrahedrons.Count; i++)
+        //        {
+        //            if (selectedTetrahedrons[0].GetComponent<GlobController>().sw != null)
+        //            {
+        //                if (!(selectedTetrahedrons[i].GetComponent<GlobController>().sw.goalPos == refercnceGoal))
+        //                {
+        //                    allGoalsSame = false;
+        //                }
+        //            }
+        //        }
 
-                if (allGoalsSame)
-                {
-                    goalPoint.position = refercnceGoal;
-                }
-                else
-                {
-                    goalPoint.position = new Vector3(230.0f, -0.5f, 230.0f);
-                }
-            }
-        }
-        else
-        {
-            goalPoint.position = new Vector3(230.0f, -0.5f, 230.0f);
-        }
+        //        if (allGoalsSame)
+        //        {
+        //            goalPoint.position = refercnceGoal;
+        //        }
+        //        else
+        //        {
+        //            goalPoint.position = new Vector3(230.0f, -0.5f, 230.0f);
+        //        }
+        //    }
+        //}
+        //else
+        //{
+        //    goalPoint.position = new Vector3(230.0f, -0.5f, 230.0f);
+        //}
 
         //Unit Movement Command
         if (Input.GetMouseButtonDown(1) && (selectedTetrahedrons.Count>0))
@@ -212,7 +207,7 @@ public class CameraController : MonoBehaviour {
 
                     for (int i = 0; i < selectedTetrahedrons.Count; i++)
                     {
-                        selectedTetrahedrons[i].GetComponent<WalkController>().startContinuousWalk(goalPoint);
+                        selectedTetrahedrons[i].GetComponent<GlobController>().sw.startContinuousWalk(goalPoint);
                     }
                 }
             }

@@ -225,6 +225,9 @@ MonoBehaviour:
   trackingActive: 0
   selectedTetrahedrons: []
   goalPoint: {fileID: 0}
+  globVertexId: -1
+  hitPos: {x: 0, y: 0, z: 0}
+  inputID: 0
 --- !u!1 &133653419
 GameObject:
   m_ObjectHideFlags: 0
@@ -304,36 +307,6 @@ Transform:
   m_Father: {fileID: 1132936368}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &223412038
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 223412039}
-  m_Layer: 0
-  m_Name: charlie
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &223412039
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 223412038}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 291984877}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &291984876
 GameObject:
   m_ObjectHideFlags: 0
@@ -348,9 +321,8 @@ GameObject:
   - component: {fileID: 291984880}
   - component: {fileID: 291984879}
   - component: {fileID: 291984878}
-  - component: {fileID: 291984883}
   m_Layer: 0
-  m_Name: Tetrahedron
+  m_Name: Tetrahedron 001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -364,13 +336,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 291984876}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.3313385, y: 0.81577563, z: 4.834708}
+  m_LocalPosition: {x: -2.23, y: 0.81577563, z: 4.834708}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 865729171}
-  - {fileID: 1066507776}
-  - {fileID: 223412039}
-  - {fileID: 1191949131}
+  m_Children: []
   m_Father: {fileID: 1509339672}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -458,77 +426,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 291984876}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c9f69bdf2d60d8468f9b7f7796301f2, type: 3}
+  m_Script: {fileID: 11500000, guid: 1f26b52d170008d4f832d29495fcb5bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  point:
-  - {x: 0, y: 0, z: 0}
-  - {x: 1, y: 0, z: 0}
-  - {x: 0.5, y: 0, z: 0.8660254}
-  - {x: 0.5, y: 0.8660254, z: 0.28867513}
-  sideSet:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  transforms: []
+  sideSetList: []
+  newTetraVtx: 020000000100000000000000
+  addNewTetra: 0
   colorPicked: 0
+  runSetup: 1
+  internalView: 0
   centerMass: {x: 0, y: 0, z: 0}
-  wantsToConnect: 0
-  connectTarget: {fileID: 0}
---- !u!114 &291984883
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 291984876}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 757d5ee7cc2693649abc155f7b811eae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  goalPos: {x: 220, y: -0.5, z: 220}
-  finalSortedList: []
-  walking: 0
-  continuousWalk: 0
-  initWalk: 0
-  setArray: []
-  startWalkTime: 0
-  currentTime: 0
-  endTime: 0
---- !u!1 &865729170
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 865729171}
-  m_Layer: 0
-  m_Name: alpha
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &865729171
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 865729170}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 291984877}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1043736829
 GameObject:
   m_ObjectHideFlags: 0
@@ -606,36 +513,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1066507775
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1066507776}
-  m_Layer: 0
-  m_Name: beta
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1066507776
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1066507775}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 291984877}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1132936367
 GameObject:
   m_ObjectHideFlags: 0
@@ -668,36 +545,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1191949130
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1191949131}
-  m_Layer: 0
-  m_Name: delta
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1191949131
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1191949130}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 291984877}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1192440976
 GameObject:
   m_ObjectHideFlags: 0
@@ -713,7 +560,7 @@ GameObject:
   - component: {fileID: 1192440979}
   - component: {fileID: 1192440978}
   m_Layer: 0
-  m_Name: Glob
+  m_Name: Tetrahedron 002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -821,8 +668,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sideSetList: []
+  newTetraVtx: 020000000100000000000000
+  addNewTetra: 0
   colorPicked: 0
   runSetup: 1
+  internalView: 0
   centerMass: {x: 0, y: 0, z: 0}
 --- !u!1 &1490757490
 GameObject:
@@ -902,7 +752,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1509339672}
-  - component: {fileID: 1509339671}
   m_Layer: 0
   m_Name: Swarm Controller
   m_TagString: Untagged
@@ -910,35 +759,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1509339671
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1509339670}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d604fd98a0ff7cc49a905b006c73846b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  walkScripts:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  goalPoint: {fileID: 1043736832}
-  prefab: {fileID: 0}
-  startMove: 0
-  tetrobotsToMake: 0
-  makeQueued: 0
-  tetrahedronCount: 0
-  armDestroyAll: 0
-  destroyAll: 0
 --- !u!4 &1509339672
 Transform:
   m_ObjectHideFlags: 0
