@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public static class TetraUtil
@@ -61,5 +62,61 @@ public static class TetraUtil
         {
             Debug.Log(target.GetType() + " does not exist");
         }
+    }
+
+    public static Vector3 averageVertices(HashSet<Vertex> vertices)
+    {
+        float totalX = 0f;
+        float totalY = 0f;
+        float totalZ = 0f;
+        int e = 0;
+
+        foreach (Vertex vertex in vertices)
+        {
+            Vector3 tempPos;
+
+            tempPos = vertex.pos;
+
+            totalX += tempPos.x;
+            totalY += tempPos.y;
+            totalZ += tempPos.z;
+
+            e++;
+        }
+
+        Vector3 finalPos = new Vector3();
+
+        finalPos.x = totalX / e;
+        finalPos.y = totalY / e;
+        finalPos.z = totalZ / e;
+
+        return finalPos;
+    }
+
+    public static Vector3 averageVertices(HashSet<Vertex> vertices, Transform targetTransform)
+    {
+        float totalX = 0f;
+        float totalY = 0f;
+        float totalZ = 0f;
+        int e = 0;
+
+        foreach (Vertex vertex in vertices)
+        {
+            Vector3 tempPos = vertex.pos;
+
+            totalX += tempPos.x;
+            totalY += tempPos.y;
+            totalZ += tempPos.z;
+
+            e++;
+        }
+
+        Vector3 finalPos = new Vector3();
+
+        finalPos.x = totalX / e;
+        finalPos.y = totalY / e;
+        finalPos.z = totalZ / e;
+
+        return targetTransform.transform.TransformPoint(finalPos);
     }
 }

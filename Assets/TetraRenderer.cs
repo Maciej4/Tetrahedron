@@ -9,7 +9,7 @@ public class TetraRenderer
     public MeshFilter meshFilter;
     public MeshCollider meshCollider;
     public MeshRenderer meshRenderer;
-    public List<NewTetrahedron> renderTetras = new List<NewTetrahedron>();
+    public List<Tetrahedron> renderTetras = new List<Tetrahedron>();
 
     //Class initializer, gets mesh related objects from globController
     public TetraRenderer(GameObject renderTarget)

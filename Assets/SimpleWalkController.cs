@@ -6,7 +6,7 @@ using UnityEngine;
 public class SimpleWalkController {
     public Vector3 goalPos = new Vector3(220.0f, -0.5f, 220.0f);
 
-    private GlobController globController;
+    private TetraController globController;
     private GameObject targetGlob;
 
     private List<Vertex> walkVertices = new List<Vertex>();
@@ -27,7 +27,7 @@ public class SimpleWalkController {
     public SimpleWalkController(GameObject targetGlob_)
     {
         targetGlob = targetGlob_;
-        globController = targetGlob.GetComponent<GlobController>();
+        globController = targetGlob.GetComponent<TetraController>();
     }
 
     private int[][] pointSideArray = {

@@ -62,12 +62,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\CameraController.cs" />
-    <Compile Include="Assets\GlobController.cs" />
-    <Compile Include="Assets\NewTetrahedron.cs" />
+    <Compile Include="Assets\InputController.cs" />
     <Compile Include="Assets\Side.cs" />
     <Compile Include="Assets\SimpleWalkController.cs" />
+    <Compile Include="Assets\TetraController.cs" />
+    <Compile Include="Assets\Tetrahedron.cs" />
     <Compile Include="Assets\TetraRenderer.cs" />
     <Compile Include="Assets\TetraUtil.cs" />
+    <Compile Include="Assets\Toggler.cs" />
+    <Compile Include="Assets\uiController.cs" />
     <Compile Include="Assets\Vertex.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>/Users/maciejbuszko/Documents/GitHub/tetrahedron/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>

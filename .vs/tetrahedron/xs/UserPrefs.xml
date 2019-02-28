@@ -1,11 +1,24 @@
 ﻿<Properties StartupConfiguration="{4D2FFCD9-9BB7-CF16-2FE8-D68C3BFD5C0C}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/SimpleWalkController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Tetrahedron.cs">
     <Files>
-      <File FileName="Assets/GlobController.cs" Line="223" Column="9" />
-      <File FileName="Assets/SimpleWalkController.cs" Line="59" Column="25" />
-      <File FileName="Assets/CameraController.cs" Line="177" Column="28" />
-      <File FileName="Assets/TetraRenderer.cs" Line="114" Column="1" />
+      <File FileName="Assets/CameraController.cs" Line="7" Column="27" />
+      <File FileName="Assets/uiController.cs" Line="36" Column="48" />
+      <File FileName="Assets/TetraController.cs" Line="26" Column="33" />
+      <File FileName="Assets/Side.cs" Line="9" Column="32" />
+      <File FileName="Assets/Vertex.cs" Line="1" Column="1" />
+      <File FileName="Assets/Tetrahedron.cs" Line="7" Column="27" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="tetrahedron" expanded="True">
+            <Node name="Assets" expanded="True">
+              <Node name="Tetrahedron.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />

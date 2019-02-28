@@ -216,12 +216,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c33cad7e580e2946807046527100a4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Boundary: 100
-  speed: 10
-  zoomSpeed: 3
-  zoomMax: 100
-  zoomMin: 5
-  trackingDistance: 5
   trackingActive: 0
   selectedTetrahedrons: []
   goalPoint: {fileID: 0}
@@ -426,15 +420,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 291984876}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f26b52d170008d4f832d29495fcb5bf, type: 3}
+  m_Script: {fileID: 11500000, guid: bb4e2c163f34d4daca8d05b5a41fe8ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sideSetList: []
-  newTetraVtx: 020000000100000000000000
+  newTetraVtx: 02000000010000000000000000000000
+  buttons: 000000000000000000000000000000000000000000000000
   addNewTetra: 0
+  addSpecialTetra: 0
+  invertLastTetra: 0
+  upendLastTetra: 0
   colorPicked: 0
+  walkControl: 0
   runSetup: 1
-  internalView: 0
   centerMass: {x: 0, y: 0, z: 0}
 --- !u!1 &1043736829
 GameObject:
@@ -573,13 +571,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1192440976}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: -0, y: -0.28663352, z: -0, w: 0.95804036}
   m_LocalPosition: {x: 1.3313385, y: 0.81577563, z: 4.834708}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1509339672}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -33.313, z: 0}
 --- !u!64 &1192440978
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -664,15 +662,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1192440976}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f26b52d170008d4f832d29495fcb5bf, type: 3}
+  m_Script: {fileID: 11500000, guid: bb4e2c163f34d4daca8d05b5a41fe8ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sideSetList: []
-  newTetraVtx: 020000000100000000000000
+  newTetraVtx: 02000000010000000000000000000000
+  buttons: 000000000000000000000000000000000000000000000000
   addNewTetra: 0
+  addSpecialTetra: 0
+  invertLastTetra: 0
+  upendLastTetra: 0
   colorPicked: 0
+  walkControl: 0
   runSetup: 1
-  internalView: 0
   centerMass: {x: 0, y: 0, z: 0}
 --- !u!1 &1490757490
 GameObject:
