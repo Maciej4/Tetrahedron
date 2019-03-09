@@ -294,7 +294,7 @@ public class CameraController : MonoBehaviour {
 
     public void addTetraFromList_()
     {
-        if (oneSelected())
+        if (oneSelected() && selection[0].GetComponent<TetraController>().newTetraVtx[2] != -1)
         {
             selection[0].GetComponent<TetraController>().addTetraFromList();
             ui.addCenterAlert("You added a tetrahedron!");
@@ -303,7 +303,7 @@ public class CameraController : MonoBehaviour {
 
     public void addSpecialFromList_()
     {
-        if (oneSelected())
+        if (oneSelected() && selection[0].GetComponent<TetraController>().newTetraVtx[2] != -1)
         {
             selection[0].GetComponent<TetraController>().addSpecialFromList();
             ui.addCenterAlert("You added a special tetrahedron!");
