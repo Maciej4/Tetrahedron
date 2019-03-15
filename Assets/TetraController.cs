@@ -27,6 +27,8 @@ public class TetraController : MonoBehaviour
     public Vector3 centerMass;
     public bool runOppositeSide = false;
     public int sideVal = 0;
+    private bool quickSideSet = false;
+    public bool disphenoidMode = false;
 
     //Runs once at start of program
     void Start()
@@ -133,35 +135,76 @@ public class TetraController : MonoBehaviour
         tetrahedrons[tetrahedrons.Count - 1].vertices[2] = tempVertex;
     }
 
-    public Side oppositeSide(Tetrahedron tetrahedron, Side side)
+    public void removeLastTetra()
     {
-        HashSet<Vertex> x = side.vertices;
-        HashSet<Vertex> y = new HashSet<Vertex>();
-        foreach (Vertex v in tetrahedron.vertices)
-        {
-            y.Add(v);
-        }
+        vertexList.RemoveAt(vertexList.Count - 1);
 
-        HashSet<Vertex> com = new HashSet<Vertex>(y.Except(x));
+        setupTetras();
+    }
 
-        if (com.Count == 2)
+    public void printVertices()
+    {
+        int c = 0;
+        Debug.Log("---------Printing vertices---------");
+        foreach (int[] integers in vertexList)
         { 
-            foreach (Tetrahedron t in tetrahedrons)
-            { 
+            Debug.Log("tetrahedron # " + c.ToString("00") + 
+            " vertices: " + integers[0].ToString("00") + 
+            ", " + integers[1].ToString("00") + 
+            ", " + integers[2].ToString("00") + 
+            ", " + integers[3].ToString("00"));
+            c++;
+        }
+    }
+
+    public void toggleHover()
+    {
+        GetComponent<Rigidbody>().isKinematic = ! this.GetComponent<Rigidbody>().isKinematic;
+        transform.position = new Vector3(this.transform.position.x, 10f, this.transform.position.z);
+    }
+
+    public void setYawRate(float deltaYaw)
+    {
+        transform.RotateAround(centerMass, Vector3.up, deltaYaw);
+    }
+
+    public void setPitchRate(float deltaPitch)
+    {
+        transform.RotateAround(centerMass, Vector3.right, deltaPitch);
+    }
+
+    public List<Side> oppositeSide(Tetrahedron tetrahedron, Side side)
+    {
+        HashSet<int> sideEndPts = TetraUtil.vertexIDs(side.vertices);
+        HashSet<int> notSideEndPts = new HashSet<int>();
+
+        List<Side> outputSides = new List<Side>();
+
+        foreach (Tetrahedron t in tetrahedrons)
+        {
+            if (t.type != 2)
+            {
+                if (t.sides.Contains(side))
+                {
+                    HashSet<int> tempSet = TetraUtil.vertexIDs(t.vertices);
+                    notSideEndPts.UnionWith(tempSet.Except(sideEndPts));
+                }
+
                 foreach (Side s in t.sides)
                 {
-                    HashSet<Vertex> tempX = s.vertices;
-                    tempX.IntersectWith(com);
+                    HashSet<int> tempSideVtx = TetraUtil.vertexIDs(s.vertices);
 
-                    if (tempX.Count == 2)
+                    tempSideVtx.IntersectWith(notSideEndPts);
+
+                    if (tempSideVtx.Count == 2)
                     {
-                        return s;
+                        outputSides.Add(s);
                     }
                 }
             }
         }
-        Debug.Log("Failure to find opposite side");
-        return side;
+
+        return outputSides;
 
     }
 
@@ -211,6 +254,8 @@ public class TetraController : MonoBehaviour
         }
 
         Debug.Log(tr.renderTetras.Count + " render tetrahedron(s)");
+
+        quickSideSet = true;
     }
 
     //Physics update, runs repeatedly
@@ -241,6 +286,9 @@ public class TetraController : MonoBehaviour
         //Sets side lengths in tetrahedrons
         int p = 0;
 
+        bool quickSetReset = false;
+        HashSet<int> alreadySetIDs = new HashSet<int>();
+
         foreach (Tetrahedron tetrahedron in tetrahedrons)
         {
             if (tetrahedron.type != 2)
@@ -252,14 +300,36 @@ public class TetraController : MonoBehaviour
                         sideSetList.Add(2.0f);
                     }
 
-                    side.length = Mathf.SmoothStep(side.length, sideSetList[p], 0.10f);
+                    if (disphenoidMode)
+                    {
+                        foreach(Side tempSide in oppositeSide(tetrahedron, side))
+                        {
+                            if (!alreadySetIDs.Contains(tempSide.ID))
+                            {
+                                sideSetList[tempSide.ID] = sideSetList[side.ID];
+                            }
+                        }
+
+                        alreadySetIDs.Add(side.ID);
+                    }
+
+                    if (quickSideSet)
+                    {
+                        quickSetReset = true;
+                        side.length = sideSetList[p];
+                    }
+                    else
+                    {
+                        side.length = Mathf.SmoothStep(side.length, sideSetList[p], 0.10f);
+                    }
+
                     side.ID = p;
 
                     if (runOppositeSide && p == sideVal)
                     {
                         runOppositeSide = false;
                         Debug.Log("----------");
-                        int oppositeID = oppositeSide(tetrahedron, side).ID;
+                        int oppositeID = oppositeSide(tetrahedron, side)[0].ID;
                         Debug.Log("Opposite side is: " + oppositeID);
                     }
 
@@ -268,8 +338,13 @@ public class TetraController : MonoBehaviour
             }
         }
 
+        if (quickSetReset)
+        {
+            quickSideSet = false;
+        }
+
         //Runs loop of tetrahedrons
-        foreach(Tetrahedron tetra in tetrahedrons)
+        foreach (Tetrahedron tetra in tetrahedrons)
         {
             tetra.loop();
         }

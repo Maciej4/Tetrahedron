@@ -10,16 +10,23 @@ public class CameraController : MonoBehaviour {
     private int screenWidth;
     private int screenHeight;
     private int zoomSpeed = 3;
-    private int zoomMin = 3;
-    private float trackingDistance = 5;
+    private float zoomMin = 3f;
+    private float zoomMax = 50f;
+    public float trackingDistance = 5;
     public bool trackingActive = false;
     public bool edgeView = false;
-    public List<Transform> selection;
+    public List<TetraController> selection;
     public Transform goalPoint;
     private float optimalZ;
     public int globVertexId = -1;
     public Vector3 hitPos;
     public int inputID;
+    public bool buildHover = false;
+    public float heightOffsetY = 0f;
+    private bool yawLeft = false;
+    private bool yawRight = false;
+    private bool pitchUp = false;
+    private bool pitchDown = false;
 
     void Start()
     {
@@ -39,7 +46,7 @@ public class CameraController : MonoBehaviour {
 
         screenWidth = Screen.width;
         screenHeight = Screen.height;
-        transform.rotation = Quaternion.LookRotation(new Vector3(0,-10,10)); // Look from (0,0,0) towards this point
+        transform.rotation = Quaternion.LookRotation(new Vector3(0, -10, 10)); // Look from (0,0,0) towards this point
     }
 
     void Update()
@@ -51,75 +58,107 @@ public class CameraController : MonoBehaviour {
 
         goalPoint = GameObject.FindGameObjectWithTag("GoalPoint").transform;
         Vector3 newPosition = transform.position;
+        float zoomAmount = zoomSpeed * Input.GetAxis("Mouse ScrollWheel");
 
-        // Scroll
-        if (Input.mousePosition.x < screenWidth && Input.mousePosition.x > screenWidth - boundary && !trackingActive)
+        if (!trackingActive) //Not Tracking
         {
-            newPosition.x += speed * Time.deltaTime; // move on +X axis
-        }
-        if (Input.mousePosition.x > 0 && Input.mousePosition.x < 0 + boundary && !trackingActive)
-        {
-            newPosition.x -= speed * Time.deltaTime; // move on -X axis
-        }
-        if (Input.mousePosition.y < screenHeight && Input.mousePosition.y > screenHeight - boundary && !trackingActive)
-        {
-            newPosition.z += speed * Time.deltaTime; // move on +Z axis
-        }
-        if (Input.mousePosition.y > 0 && Input.mousePosition.y < 0 + boundary && !trackingActive)
-        {
-            newPosition.z -= speed * Time.deltaTime; // move on -Z axis
-        }
-
-        //Tracking
-        if (trackingActive && selection.Count != 0 && selection != null)
-        {
-            float totalAverageX = 0.0f;
-            float totalAverageZ = 0.0f;
-
-            for (int i = 0; i < selection.Count; i++)
+            // Screen scrolling
+            if (Input.mousePosition.x < screenWidth && Input.mousePosition.x > screenWidth - boundary)
             {
-                if (selection[i].GetComponent<TetraController>() != null)
-                {
-                    totalAverageX += selection[i].GetComponent<TetraController>().centerMass.x;
-                    totalAverageZ += selection[i].GetComponent<TetraController>().centerMass.z;
-                }
+                newPosition.x += speed * Time.deltaTime; // move on +X axis
+            }
+            if (Input.mousePosition.x > 0 && Input.mousePosition.x < 0 + boundary)
+            {
+                newPosition.x -= speed * Time.deltaTime; // move on -X axis
+            }
+            if (Input.mousePosition.y < screenHeight && Input.mousePosition.y > screenHeight - boundary)
+            {
+                newPosition.z += speed * Time.deltaTime; // move on +Z axis
+            }
+            if (Input.mousePosition.y > 0 && Input.mousePosition.y < 0 + boundary)
+            {
+                newPosition.z -= speed * Time.deltaTime; // move on -Z axis
             }
 
-            newPosition.x = totalAverageX / (float)selection.Count;
-            optimalZ = totalAverageZ / (float)selection.Count;
+            //Zoom while untracked
+            Vector3 zoomDelta;
+            
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            zoomDelta = ray.direction.normalized * zoomAmount;
+
+            if (newPosition.y + zoomDelta.y >= zoomMin && newPosition.y + zoomDelta.y <= zoomMax)
+            {
+                newPosition += zoomDelta;
+            }
         }
+        else if (trackingActive && selection.Count > 0) //Tracking Tetrahedron(s)
+        {
+            //Movment while tracked
+            Vector3 trackingCenter = TetraUtil.averageSelection(selection);
+
+            newPosition.x = trackingCenter.x;
+            if (trackingCenter.y > 1f)
+            {
+                heightOffsetY = trackingCenter.y;
+            }
+            else
+            {
+                heightOffsetY = 0f;
+            }
+            optimalZ = trackingCenter.z;
+
+            //Zooming while tracked
+            trackingDistance -= zoomAmount / 2;
+            trackingDistance = Mathf.Clamp(trackingDistance, zoomMin, zoomMax);
+            newPosition.y = trackingDistance + heightOffsetY;
+            newPosition.z = optimalZ - trackingDistance;
+
+            //Rotate selected tetrahedron
+            if (buildHover && selection.Count == 1)
+            {
+                if (yawLeft)
+                {
+                    selection[0].setYawRate(1.0f);
+                }
+                else if (yawRight)
+                {
+                    selection[0].setYawRate(-1.0f);
+                }
+                else
+                {
+                    selection[0].setYawRate(0.0f);
+                }
+
+                if (pitchUp)
+                {
+                    selection[0].setPitchRate(1.0f);
+                }
+                else if (pitchDown)
+                {
+                    selection[0].setPitchRate(-1.0f);
+                }
+                else
+                {
+                    selection[0].setPitchRate(0.0f);
+                }
+
+                yawLeft = false;
+                yawRight = false;
+                pitchUp = false;
+                pitchDown = false;
+            }
+        }
+
+
 
         if (Input.GetKeyUp(KeyCode.LeftControl))
         {
             inputID = 0;
         }
 
-        //Zoom
-        float zoomAmount = zoomSpeed * Input.GetAxis("Mouse ScrollWheel");
-        if (zoomAmount < 0 || transform.position.y > zoomMin)
-        {
-            Vector3 zoomDelta;
 
-            if (!trackingActive)
-            {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                zoomDelta = ray.direction.normalized * zoomAmount;
-                newPosition += zoomDelta;
-            }
-            
-        }
-        else
-        {
-            newPosition.y = zoomMin;
-        }
 
-        if (trackingActive)
-        {
-            trackingDistance -= zoomAmount / 2;
-            trackingDistance = Mathf.Clamp(Mathf.Clamp(trackingDistance, 3, 50), transform.position.y - 3, transform.position.y + 3);
-            newPosition.y = trackingDistance;
-            newPosition.z = optimalZ - trackingDistance;
-        }
+
 
         //Unit Selection
         if (Input.GetMouseButtonDown(0))
@@ -143,7 +182,7 @@ public class CameraController : MonoBehaviour {
 
                         if (!copyDetected)
                         {
-                            selection.Add(hit.transform);
+                            selection.Add(hit.transform.GetComponent<TetraController>());
                         }
                     }
                 }
@@ -160,10 +199,14 @@ public class CameraController : MonoBehaviour {
                     if (!hit.transform.CompareTag("Terrain"))
                     {
                         selection.Clear();
-                        selection.Add(hit.transform);
+                        selection.Add(hit.transform.GetComponent<TetraController>());
                     }
                     else
                     {
+                        if (buildHover)
+                        {
+                            toggleHover_();
+                        }
                         selection.Clear();
                         trackingActive = false;
                         globVertexId = -1;
@@ -172,46 +215,8 @@ public class CameraController : MonoBehaviour {
             }
         }
 
-        //Placment of waypoint
-        //if (selectedTetrahedrons.Count > 0)
-        //{
-        //    if (selectedTetrahedrons.Count == 1 && (selectedTetrahedrons[0].GetComponent<GlobController>().sw != null))
-        //    {
-        //        goalPoint.position = selectedTetrahedrons[0].GetComponent<GlobController>().sw.goalPos;
-        //    }
-        //    else if (selectedTetrahedrons[0].GetComponent<GlobController>().sw != null)
-        //    {
-        //        bool allGoalsSame = true;
-        //        Vector3 refercnceGoal = selectedTetrahedrons[0].GetComponent<GlobController>().sw.goalPos;
-
-        //        for (int i = 1; i < selectedTetrahedrons.Count; i++)
-        //        {
-        //            if (selectedTetrahedrons[0].GetComponent<GlobController>().sw != null)
-        //            {
-        //                if (!(selectedTetrahedrons[i].GetComponent<GlobController>().sw.goalPos == refercnceGoal))
-        //                {
-        //                    allGoalsSame = false;
-        //                }
-        //            }
-        //        }
-
-        //        if (allGoalsSame)
-        //        {
-        //            goalPoint.position = refercnceGoal;
-        //        }
-        //        else
-        //        {
-        //            goalPoint.position = new Vector3(230.0f, -0.5f, 230.0f);
-        //        }
-        //    }
-        //}
-        //else
-        //{
-        //    goalPoint.position = new Vector3(230.0f, -0.5f, 230.0f);
-        //}
-
         //Unit Movement Command
-        if (Input.GetMouseButtonDown(1) && (selection.Count>0))
+        if (Input.GetMouseButtonDown(1) && (selection.Count > 0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -224,7 +229,7 @@ public class CameraController : MonoBehaviour {
 
                     for (int i = 0; i < selection.Count; i++)
                     {
-                        selection[i].GetComponent<TetraController>().sw.startContinuousWalk(goalPoint);
+                        selection[i].sw.startContinuousWalk(goalPoint);
                     }
                 }
             }
@@ -232,7 +237,7 @@ public class CameraController : MonoBehaviour {
 
         transform.position = Vector3.MoveTowards(transform.position, newPosition, 0.5f);
     }
-
+    
     void OnGUI()
     {
         //Display tracking and selected tetrahedrons
@@ -244,23 +249,26 @@ public class CameraController : MonoBehaviour {
             {
                 if (edgeView)
                 {
-                    foreach (Tetrahedron tetrahedron in selection[0].GetComponent<TetraController>().tetrahedrons)
+                    foreach (Tetrahedron tetrahedron in selection[0].tetrahedrons)
                     {
-                        foreach (Side side in tetrahedron.sides)
+                        if (tetrahedron.type != 2)
                         {
-                            Vector3 finalPos = TetraUtil.averageVertices(side.vertices, selection[0]);
+                            foreach (Side side in tetrahedron.sides)
+                            {
+                                Vector3 finalPos = TetraUtil.averageVertices(side.vertices, selection[0].transform);
 
-                            ui.numberAtPos(finalPos, side.ID, false,"s");
+                                ui.numberAtPos(finalPos, side.ID, false, "s");
+                            }
                         }
                     }
                 }
                 else
                 {
-                    foreach (Vertex vertex in selection[0].GetComponent<TetraController>().vertices)
+                    foreach (Vertex vertex in selection[0].vertices)
                     {
                         Vector3 tempPos = selection[0].transform.TransformPoint(vertex.pos);
 
-                        ui.numberAtPos(tempPos, vertex.ID, selection[0].GetComponent<TetraController>().newTetraVtx.Contains(vertex.ID));
+                        ui.numberAtPos(tempPos, vertex.ID, selection[0].newTetraVtx.Contains(vertex.ID));
                     }
                 }
             }
@@ -276,7 +284,7 @@ public class CameraController : MonoBehaviour {
     }
 
     public bool oneSelected(bool showAlert = true)
-    { 
+    {
         if (selection.Count == 1)
         {
             return true;
@@ -294,18 +302,18 @@ public class CameraController : MonoBehaviour {
 
     public void addTetraFromList_()
     {
-        if (oneSelected() && selection[0].GetComponent<TetraController>().newTetraVtx[2] != -1)
+        if (oneSelected() && selection[0].newTetraVtx[2] != -1)
         {
-            selection[0].GetComponent<TetraController>().addTetraFromList();
+            selection[0].addTetraFromList();
             ui.addCenterAlert("You added a tetrahedron!");
         }
     }
 
     public void addSpecialFromList_()
     {
-        if (oneSelected() && selection[0].GetComponent<TetraController>().newTetraVtx[2] != -1)
+        if (oneSelected() && selection[0].newTetraVtx[2] != -1)
         {
-            selection[0].GetComponent<TetraController>().addSpecialFromList();
+            selection[0].addSpecialFromList();
             ui.addCenterAlert("You added a special tetrahedron!");
         }
     }
@@ -314,7 +322,7 @@ public class CameraController : MonoBehaviour {
     {
         if (oneSelected())
         {
-            selection[0].GetComponent<TetraController>().invertLastTetra();
+            selection[0].invertLastTetra();
             ui.addCenterAlert("You inverted the last tetrahedron!");
         }
     }
@@ -325,9 +333,13 @@ public class CameraController : MonoBehaviour {
     }
 
     public void toggleTracking()
-    { 
-        if(selection.Count > 0)
+    {
+        if (selection.Count > 0)
         {
+            if (buildHover)
+            {
+                toggleHover_();
+            }
             trackingActive = !trackingActive;
             trackingDistance = transform.position.y;
             edgeView = false;
@@ -340,6 +352,66 @@ public class CameraController : MonoBehaviour {
         {
             edgeView = !edgeView;
             ui.addCenterAlert("You toggled edge view!");
+        }
+    }
+
+    public void printVertices_()
+    { 
+        if (oneSelected())
+        {
+            selection[0].printVertices();
+            ui.addCenterAlert("Printed vertices of " + selection[0].name);
+        }
+    }
+
+    public void removeLastTetra_()
+    { 
+        if (oneSelected())
+        {
+            selection[0].removeLastTetra();
+            ui.addCenterAlert("Removed last tetrahedron");
+        }
+    }
+
+    public void toggleHover_()
+    { 
+        if (oneSelected() && trackingActive)
+        {
+            buildHover = !buildHover;
+            selection[0].toggleHover();
+            ui.addCenterAlert("Toggled hover build mode");
+        }
+    }
+
+    public void increaseYaw_()
+    { 
+        if (oneSelected() && buildHover)
+        {
+            yawLeft = true;
+        }
+    }
+
+    public void decreaseYaw_()
+    {
+        if (oneSelected() && buildHover)
+        {
+            yawRight = true;
+        }
+    }
+
+    public void increasePitch_()
+    {
+        if (oneSelected() && buildHover)
+        {
+            pitchUp = true;
+        }
+    }
+
+    public void decreasePitch_()
+    {
+        if (oneSelected() && buildHover)
+        {
+            pitchDown = true;
         }
     }
 }

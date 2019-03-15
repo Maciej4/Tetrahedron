@@ -198,7 +198,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 55727402}
   m_LocalRotation: {x: 0.2588191, y: -0, z: -0, w: 0.9659258}
-  m_LocalPosition: {x: 1.800003, y: 2.65, z: 1.800003}
+  m_LocalPosition: {x: 1.800003, y: 3.5, z: 1.800003}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -216,12 +216,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c33cad7e580e2946807046527100a4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trackingDistance: 5
   trackingActive: 0
-  selectedTetrahedrons: []
+  edgeView: 0
+  selection: []
   goalPoint: {fileID: 0}
   globVertexId: -1
   hitPos: {x: 0, y: 0, z: 0}
   inputID: 0
+  buildHover: 0
+  heightOffsetY: 0
 --- !u!1 &133653419
 GameObject:
   m_ObjectHideFlags: 0
@@ -425,15 +429,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sideSetList: []
   newTetraVtx: 02000000010000000000000000000000
-  buttons: 000000000000000000000000000000000000000000000000
-  addNewTetra: 0
-  addSpecialTetra: 0
-  invertLastTetra: 0
-  upendLastTetra: 0
   colorPicked: 0
   walkControl: 0
   runSetup: 1
   centerMass: {x: 0, y: 0, z: 0}
+  runOppositeSide: 0
+  sideVal: 0
+  disphenoidMode: 0
 --- !u!1 &1043736829
 GameObject:
   m_ObjectHideFlags: 0
@@ -667,15 +669,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sideSetList: []
   newTetraVtx: 02000000010000000000000000000000
-  buttons: 000000000000000000000000000000000000000000000000
-  addNewTetra: 0
-  addSpecialTetra: 0
-  invertLastTetra: 0
-  upendLastTetra: 0
   colorPicked: 0
   walkControl: 0
   runSetup: 1
   centerMass: {x: 0, y: 0, z: 0}
+  runOppositeSide: 0
+  sideVal: 0
+  disphenoidMode: 0
 --- !u!1 &1490757490
 GameObject:
   m_ObjectHideFlags: 0

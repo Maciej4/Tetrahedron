@@ -1,13 +1,14 @@
 ﻿<Properties StartupConfiguration="{4D2FFCD9-9BB7-CF16-2FE8-D68C3BFD5C0C}|">
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets/CameraController.cs">
     <Files>
-      <File FileName="Assets/CameraController.cs" Line="306" Column="95" />
+      <File FileName="Assets/TetraController.cs" Line="47" Column="28" />
+      <File FileName="Assets/CameraController.cs" Line="89" Column="36" />
+      <File FileName="Assets/InputController.cs" Line="26" Column="102" />
       <File FileName="Assets/uiController.cs" Line="36" Column="48" />
-      <File FileName="Assets/TetraController.cs" Line="26" Column="33" />
+      <File FileName="Assets/TetraUtil.cs" Line="164" Column="10" />
+      <File FileName="Assets/Toggler.cs" Line="18" Column="14" />
+      <File FileName="Assets/Tetrahedron.cs" Line="36" Column="51" />
       <File FileName="Assets/Side.cs" Line="9" Column="32" />
-      <File FileName="Assets/Vertex.cs" Line="1" Column="1" />
-      <File FileName="Assets/Tetrahedron.cs" Line="7" Column="27" />
-      <File FileName="Assets/SimpleWalkController.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">

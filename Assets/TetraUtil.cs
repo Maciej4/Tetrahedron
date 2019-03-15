@@ -119,4 +119,52 @@ public static class TetraUtil
 
         return targetTransform.transform.TransformPoint(finalPos);
     }
+
+    public static Vector3 averageSelection(List<TetraController> selection)
+    {
+        float totalX = 0f;
+        float totalY = 0f;
+        float totalZ = 0f;
+
+        foreach (TetraController tetraCtrl in selection)
+        {
+            Vector3 tempPos = tetraCtrl.centerMass;
+
+            totalX += tempPos.x;
+            totalY += tempPos.y;
+            totalZ += tempPos.z;
+        }
+
+        Vector3 result = new Vector3();
+
+        result.x = totalX / (float)selection.Count;
+        result.y = totalY / (float)selection.Count;
+        result.z = totalZ / (float)selection.Count;
+
+        return result;
+    }
+
+    public static HashSet<int> vertexIDs(HashSet<Vertex> vertices)
+    {
+        HashSet<int> result = new HashSet<int>();
+
+        foreach (Vertex vertex in vertices)
+        {
+            result.Add(vertex.ID);
+        }
+
+        return result;
+    }
+
+    public static HashSet<int> vertexIDs(Vertex[] vertices)
+    {
+        HashSet<int> result = new HashSet<int>();
+
+        foreach (Vertex vertex in vertices)
+        {
+            result.Add(vertex.ID);
+        }
+
+        return result;
+    }
 }
